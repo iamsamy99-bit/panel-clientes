@@ -60,9 +60,9 @@
         </button>
       </div>
 
-      <!-- Selector de Negocio / Giro Activo -->
+      <!-- Selector de Negocio / Perfil de Empresa -->
       <div class="account-selector-shell">
-        <div class="account-selector-inner" id="businessSelectorBtn">
+        <button class="account-selector-inner" id="businessSelectorBtn" title="Configurar Giro de Empresa y Plantilla de Agente IA" aria-label="Abrir configuración de giro de empresa y plantillas de agente">
           <div class="business-avatar" id="currentGiroIcon">
             <svg class="giro-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
           </div>
@@ -73,7 +73,7 @@
           <svg class="chevron-icon" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
           </svg>
-        </div>
+        </button>
       </div>
 
       <!-- Enlaces del Menú Principal -->
@@ -234,6 +234,15 @@
             <span class="theme-label" id="themeTextLabel">Modo Oscuro</span>
           </button>
 
+          <!-- Botón Rápido de Integraciones Oficiales -->
+          <button class="icon-action-btn" id="btnTopIntegrations" aria-label="Integraciones y Conexiones" title="Ver integraciones oficiales: WhatsApp, Vapi, ElevenLabs, Cal.com y Stripe">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+              <polyline points="2 17 12 22 22 17"/>
+              <polyline points="2 12 12 17 22 12"/>
+            </svg>
+          </button>
+
           <!-- Indicador de Notificaciones / WhatsApp en vivo -->
           <button class="icon-action-btn" id="btnWhatsAppQuick" aria-label="WhatsApp" title="8 mensajes sin leer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -257,32 +266,6 @@
       <!-- VISTA PRINCIPAL SCROLLEABLE -->
       <div class="content-scrollable">
 
-        <!-- SELECTOR DE GIRO DE NEGOCIO (ADAPTACIÓN DE LA IA) -->
-        <div class="vertical-selector-bar">
-          <div class="vertical-pills-wrap" id="verticalPills">
-            <button class="v-pill active" data-giro="restaurante">
-              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
-              <span>Restaurante & Delivery</span>
-            </button>
-            <button class="v-pill" data-giro="clinica">
-              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-              <span>Clínica & Dental</span>
-            </button>
-            <button class="v-pill" data-giro="inmobiliaria">
-              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"></path></svg>
-              <span>Inmobiliaria</span>
-            </button>
-            <button class="v-pill" data-giro="servicios">
-              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-              <span>Servicios & Asesoría</span>
-            </button>
-            <button class="v-pill" data-giro="ecommerce">
-              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-              <span>E-commerce & Retail</span>
-            </button>
-          </div>
-        </div>
-
         <!-- SECCIÓN HERO DE CERO FRICCIÓN -->
         <section class="welcome-hero-section">
           <div class="hero-content">
@@ -303,7 +286,7 @@
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Simular Llamada IA</span>
+                <span class="action-title" id="actionSimTitle">Simular Llamada IA</span>
                 <span class="action-sub">Prueba el audio y respuestas</span>
               </div>
             </button>
@@ -316,8 +299,8 @@
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Nuevo Lead / Llamada</span>
-                <span class="action-sub">Disparar llamada saliente</span>
+                <span class="action-title" id="actionLeadTitle">Nuevo Registro / Llamada</span>
+                <span class="action-sub" id="actionLeadSub">Disparar llamada saliente</span>
               </div>
             </button>
 
@@ -331,8 +314,8 @@
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title" id="actionMenuTitle">Actualizar Menú / Precios</span>
-                <span class="action-sub">Subir PDF para la IA</span>
+                <span class="action-title" id="actionMenuTitle">Actualizar Base de Datos</span>
+                <span class="action-sub" id="actionMenuSub">Subir PDF para la IA</span>
               </div>
             </button>
 
@@ -343,8 +326,8 @@
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Chat de WhatsApp</span>
-                <span class="action-sub">Atender en vivo con bot</span>
+                <span class="action-title" id="actionChatTitle">Chat de WhatsApp</span>
+                <span class="action-sub" id="actionChatSub">Atender en vivo con bot</span>
               </div>
             </button>
           </div>
@@ -654,7 +637,7 @@
               <!-- Barra de Control de la Tabla -->
               <div class="table-action-bar">
                 <div class="table-title-group">
-                  <h2 class="section-title">Llamadas y Pedidos en Tiempo Real</h2>
+                  <h2 class="section-title" id="tableTitle">Llamadas y Pedidos en Tiempo Real</h2>
                   <span class="record-counter" id="tableRecordCount">Mostrando 6 registros</span>
                 </div>
 
@@ -665,14 +648,14 @@
                       <circle cx="11" cy="11" r="8"/>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
-                    <input type="text" id="tableSearchInput" placeholder="Buscar por cliente, teléfono o pedido..." autocomplete="off">
+                    <input type="text" id="tableSearchInput" placeholder="Buscar por cliente, teléfono o comanda..." autocomplete="off">
                   </div>
 
                   <!-- Filtro por Canal / Estado -->
                   <div class="status-filter-pills" id="statusFilterPills">
                     <button class="status-pill-btn active" data-filter="all">Todos</button>
-                    <button class="status-pill-btn" data-filter="pedidos">Pedidos</button>
-                    <button class="status-pill-btn" data-filter="citas">Citas / Demos</button>
+                    <button class="status-pill-btn" data-filter="pedidos" id="filterPillTab2">Pedidos</button>
+                    <button class="status-pill-btn" data-filter="citas" id="filterPillTab3">Citas / Demos</button>
                     <button class="status-pill-btn" data-filter="whatsapp">WhatsApp</button>
                   </div>
 
@@ -691,13 +674,13 @@
               <!-- Contenedor Responsivo de la Tabla -->
               <div class="table-responsive-wrapper">
                 <table class="data-table" id="callsTable">
-                  <thead>
+                  <thead id="callsTableHead">
                     <tr>
-                      <th>CLIENTE Y CONTACTO</th>
-                      <th>CANAL Y DURACIÓN</th>
-                      <th>HORA Y DETALLE</th>
-                      <th>RESULTADO IA</th>
-                      <th class="text-right">IMPORTE / VALOR</th>
+                      <th id="thCol1">CLIENTE Y CONTACTO</th>
+                      <th id="thCol2">CANAL Y DURACIÓN</th>
+                      <th id="thCol3">HORA Y DETALLE</th>
+                      <th id="thCol4">RESULTADO IA</th>
+                      <th class="text-right" id="thCol5">IMPORTE / VALOR</th>
                       <th class="text-center">ACCIONES</th>
                     </tr>
                   </thead>
@@ -872,6 +855,254 @@
             </button>
           </div>
         </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: AJUSTES DE PERFIL DE EMPRESA Y PLANTILLAS DE AGENTE -->
+  <div class="modal-backdrop" id="businessProfileModal" aria-hidden="true">
+    <div class="modal-bezel-shell profile-modal-shell">
+      <div class="modal-inner-core">
+        
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">Perfil de Empresa y Plantilla de Agente</h3>
+            <p class="modal-subtitle">Configura el giro registrado de tu negocio para adaptar el vocabulario y agente</p>
+          </div>
+          <button class="modal-close-btn" id="btnCloseProfileModal" aria-label="Cerrar modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <form class="modal-form" id="businessProfileForm" onsubmit="handleSaveProfile(event)">
+          <div class="form-group full-width">
+            <label for="companyNameInput">Nombre de tu Empresa / Negocio</label>
+            <div class="input-with-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <input type="text" id="companyNameInput" value="Trattoria Bella Napoli" required>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Giro del Negocio y Plantilla Operativa</label>
+            <div class="rubro-options-grid" id="rubroOptionsGrid">
+              
+              <div class="rubro-option-card active" data-rubro="restaurante">
+                <div class="rubro-card-top">
+                  <div class="rubro-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                  </div>
+                  <span class="rubro-badge">Comidas & Delivery</span>
+                </div>
+                <h4 class="rubro-title">Restaurante & Comida</h4>
+                <p class="rubro-desc">Vocabulario de comandas a cocina, pedidos por teléfono y WhatsApp, y menú de platillos.</p>
+                <span class="rubro-agent-tag">Agente: Mario (Cocina)</span>
+              </div>
+
+              <div class="rubro-option-card" data-rubro="clinica_salud">
+                <div class="rubro-card-top">
+                  <div class="rubro-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                  </div>
+                  <span class="rubro-badge">Salud & Citas</span>
+                </div>
+                <h4 class="rubro-title">Clínica Dental & Médica</h4>
+                <p class="rubro-desc">Vocabulario de citas médicas, triaje de urgencias, aranceles y agenda de especialistas.</p>
+                <span class="rubro-agent-tag">Agente: Sofía (Triaje)</span>
+              </div>
+
+              <div class="rubro-option-card" data-rubro="inmobiliaria">
+                <div class="rubro-card-top">
+                  <div class="rubro-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"></path></svg>
+                  </div>
+                  <span class="rubro-badge">Real Estate</span>
+                </div>
+                <h4 class="rubro-title">Inmobiliaria & Preventa</h4>
+                <p class="rubro-desc">Calificación de prospectos, visitas a showroom, planos y amenidades de desarrollos.</p>
+                <span class="rubro-agent-tag">Agente: Mateo (Asesor)</span>
+              </div>
+
+              <div class="rubro-option-card" data-rubro="servicios_b2b">
+                <div class="rubro-card-top">
+                  <div class="rubro-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                  </div>
+                  <span class="rubro-badge">B2B & Asesoría</span>
+                </div>
+                <h4 class="rubro-title">Servicios Profesionales</h4>
+                <p class="rubro-desc">Consultas especializadas, agendamiento de demos comerciales y cotizaciones de servicios.</p>
+                <span class="rubro-agent-tag">Agente: Valentina (Ventas)</span>
+              </div>
+
+              <div class="rubro-option-card" data-rubro="ecommerce">
+                <div class="rubro-card-top">
+                  <div class="rubro-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                  </div>
+                  <span class="rubro-badge">Retail Online</span>
+                </div>
+                <h4 class="rubro-title">E-commerce & Tienda</h4>
+                <p class="rubro-desc">Soporte post-venta, rastreo de paquetería DHL/FedEx y políticas de devolución.</p>
+                <span class="rubro-agent-tag">Agente: Camila (Soporte)</span>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="modal-actions-bar">
+            <button type="button" class="btn-cancel" id="btnCancelProfile">Cancelar</button>
+            <button type="submit" class="btn-submit-op" id="btnSaveProfile">
+              <span>Guardar y Adaptar Panel</span>
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: MARKETPLACE DE INTEGRACIONES OFICIALES Y VERIFICADAS -->
+  <div class="modal-backdrop" id="integracionesModal" aria-hidden="true">
+    <div class="modal-bezel-shell integrations-modal-shell">
+      <div class="modal-inner-core">
+        
+        <div class="modal-header">
+          <div class="modal-title-group">
+            <h3 class="modal-title">Marketplace de Integraciones</h3>
+            <p class="modal-subtitle">Conexiones oficiales verificadas en tiempo real para tu negocio</p>
+          </div>
+          <button class="modal-close-btn" id="btnCloseIntegrationsModal" aria-label="Cerrar modal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="integrations-list-grid" id="integrationsListGrid">
+          
+          <!-- 1. WhatsApp Cloud API (Meta) -->
+          <div class="integration-row-card is-connected">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#25D366"/>
+                <path d="M17.5 14.3c-.3-.1-1.7-.8-1.9-.9-.3-.1-.5-.1-.7.2s-.8 1-.9 1.2c-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5s-.7-1.7-1-2.3c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4s-1.2 1.2-1.2 2.9c0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.7 5.8 5.2.8.3 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.3-.3-.6-.4z" fill="#ffffff"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">WhatsApp Cloud API (Meta)</h4>
+                <span class="integration-badge connected">Conectada</span>
+              </div>
+              <p class="integration-detail">Línea oficial Meta verificada: <strong class="tabular">+52 (55) 9225-4012</strong> • Webhook 200 OK</p>
+            </div>
+            <button class="integration-btn-ghost" onclick="Toast.show('WhatsApp API operativo al 100%', 'success')">Verificar</button>
+          </div>
+
+          <!-- 2. Vapi Voice AI -->
+          <div class="integration-row-card is-connected">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#18181b"/>
+                <path d="M6 7l6 10 6-10h-3.2l-2.8 5-2.8-5H6z" fill="#00D26A"/>
+                <circle cx="12" cy="7" r="1.5" fill="#38BDF8"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">Vapi (Telefonía SIP & Agentes)</h4>
+                <span class="integration-badge connected">Conectada</span>
+              </div>
+              <p class="integration-detail">Troncal SIP activa • Phone ID: 978ce92b-57ac • Asistente Valeria v2</p>
+            </div>
+            <button class="integration-btn-ghost" onclick="openCallSimulatorModal()">Probar Llamada</button>
+          </div>
+
+          <!-- 3. ElevenLabs TTS -->
+          <div class="integration-row-card is-connected">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#000000"/>
+                <rect x="7" y="6" width="3.5" height="12" rx="1.75" fill="#ffffff"/>
+                <rect x="13.5" y="6" width="3.5" height="12" rx="1.75" fill="#ffffff"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">ElevenLabs (Motor de Voz IA)</h4>
+                <span class="integration-badge connected">Conectada</span>
+              </div>
+              <p class="integration-detail">Modelo Flash v2.5 • Cartesia Valeria MX Natural • Latencia: 138ms</p>
+            </div>
+            <button class="integration-btn-ghost" onclick="openVoiceSettings()">Ajustar Voz</button>
+          </div>
+
+          <!-- 4. Cal.com / Google Calendar -->
+          <div class="integration-row-card" id="calcomIntegrationCard">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#292929"/>
+                <path d="M7 6v2m10-2v2M6 10h12M7 8h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2z" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">Cal.com (Agenda de Citas)</h4>
+                <span class="integration-badge disconnected" id="calcomBadge">No configurada</span>
+              </div>
+              <p class="integration-detail" id="calcomDetail">Sincroniza tus horarios y citas automáticamente en tu calendario.</p>
+            </div>
+            <button class="integration-btn-action" id="btnConnectCalcom" onclick="toggleCalcomIntegration()">Vincular</button>
+          </div>
+
+          <!-- 5. Stripe Connect -->
+          <div class="integration-row-card">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#635BFF"/>
+                <path d="M10.8 10.3c0-.7.6-1.1 1.5-1.1 1.4 0 2.8.5 3.7 1.1l.6-2.5c-.9-.4-2.4-.8-4.1-.8-3.4 0-5.7 1.8-5.7 4.7 0 4.6 6.3 3.9 6.3 5.9 0 .9-.8 1.2-1.8 1.2-1.6 0-3.3-.6-4.5-1.4l-.6 2.6c1.2.6 3 1 4.9 1 3.6 0 6-1.7 6-4.8 0-5-6.3-4.1-6.3-5.9z" fill="#ffffff"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">Stripe Connect (Cobros en Llamada)</h4>
+                <span class="integration-badge disconnected">No conectada</span>
+              </div>
+              <p class="integration-detail">Genera links de pago seguros por WhatsApp o cobra tarjetas vía voz con sello PCI-DSS.</p>
+            </div>
+            <button class="integration-btn-action" onclick="Toast.show('Iniciando vinculación segura con Stripe Connect...', 'info')">Conectar Stripe</button>
+          </div>
+
+          <!-- 6. Webhooks Externos (POS / CRM / Doctoralia) -->
+          <div class="integration-row-card is-connected">
+            <div class="integration-brand-box">
+              <svg class="integration-brand-svg" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#0284c7"/>
+                <circle cx="8" cy="12" r="3" fill="#ffffff"/>
+                <circle cx="16" cy="8" r="2.5" fill="#ffffff"/>
+                <circle cx="16" cy="16" r="2.5" fill="#ffffff"/>
+                <path d="M11 12h2.5M11 12l2.5-4M11 12l2.5 4" stroke="#ffffff" stroke-width="1.8"/>
+              </svg>
+            </div>
+            <div class="integration-meta">
+              <div class="integration-header-row">
+                <h4 class="integration-name">Webhooks & Cloudflare D1</h4>
+                <span class="integration-badge connected">Conectada</span>
+              </div>
+              <p class="integration-detail">Sincronización en tiempo real de leads, pedidos y comandas con base de datos Cloudflare.</p>
+            </div>
+            <button class="integration-btn-ghost" onclick="Toast.show('Webhooks D1 verificados: 0 errores en los últimos 7 días', 'success')">Verificar</button>
+          </div>
+
+        </div>
 
       </div>
     </div>

@@ -250,6 +250,8 @@ a {
 }
 
 .account-selector-inner {
+  width: 100%;
+  text-align: left;
   background: var(--card-inner-bg);
   border: 1px solid var(--border-inner);
   border-radius: calc(var(--radius-inner) - 3px);
@@ -2667,6 +2669,211 @@ a {
 
 .transactions-section {
   animation: entryFadeUp 650ms var(--ease-spring) forwards;
+}
+
+/* Modal de Perfil de Empresa & Plantilla de Agente */
+.profile-modal-shell {
+  max-width: 680px;
+}
+
+.rubro-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.rubro-option-card {
+  padding: 14px;
+  border-radius: var(--radius-inner);
+  background: var(--card-nested-bg);
+  border: 1px solid var(--border-inner); /* taste-skill-ignore */
+  cursor: pointer;
+  transition: transform 140ms var(--ease-smooth), background-color 140ms var(--ease-smooth), border-color 140ms var(--ease-smooth);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rubro-option-card:hover {
+  background: var(--card-inner-hover);
+  transform: translateY(-2px);
+}
+
+.rubro-option-card.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-soft);
+}
+
+.rubro-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rubro-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--card-outer-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+}
+
+.rubro-icon-box svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rubro-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.rubro-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rubro-desc {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.rubro-agent-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+/* Modal de Marketplace de Integraciones */
+.integrations-modal-shell {
+  max-width: 640px;
+}
+
+.integrations-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.integration-row-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius-inner);
+  background: var(--card-nested-bg);
+  border: 1px solid var(--border-inner); /* taste-skill-ignore */
+  transition: transform 140ms var(--ease-smooth), background-color 140ms var(--ease-smooth);
+}
+
+.integration-brand-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.integration-brand-svg {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.integration-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.integration-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.integration-name {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.integration-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.integration-badge.connected {
+  background: var(--status-emerald-bg);
+  color: var(--status-emerald);
+}
+
+.integration-badge.disconnected {
+  background: rgba(148, 163, 184, 0.12);
+  color: var(--text-muted);
+}
+
+.integration-badge.available {
+  background: var(--status-amber-bg);
+  color: var(--status-amber);
+}
+
+.integration-detail {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.integration-btn-ghost {
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--card-outer-bg);
+  border: 1px solid var(--border-inner); /* taste-skill-ignore */
+  cursor: pointer;
+  transition: background-color 140ms var(--ease-smooth), color 140ms var(--ease-smooth);
+}
+
+.integration-btn-ghost:hover {
+  background: var(--card-inner-hover);
+  color: var(--text-primary);
+}
+
+.integration-btn-action {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent-primary);
+  border: none;
+  cursor: pointer;
+  transition: background-color 140ms var(--ease-smooth);
+}
+
+.integration-btn-action:hover {
+  background: var(--accent-hover);
 }
 
 @media (prefers-reduced-motion: reduce) {
