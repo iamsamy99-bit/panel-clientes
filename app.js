@@ -1,6 +1,6 @@
 /**
- * NEXUS CORE — APPLICATION CONTROLLER
- * Arquitectura Anti-Fricción para Clientes Corporativos
+ * ATENDO - PANEL DE CONTROL Y OPERACIONES IA (CONTROLLER)
+ * Arquitectura Anti-Fricción: Agentes de Voz y Automatización WhatsApp
  */
 
 // ==========================================================================
@@ -10,21 +10,19 @@ const ThemeEngine = {
   themeMeta: document.querySelector('meta[name="color-scheme"]'),
   toggleBtn: document.getElementById('themeToggleBtn'),
   themeTextLabel: document.getElementById('themeTextLabel'),
-  STORAGE_KEY: 'nexus_color_theme',
+  STORAGE_KEY: 'atendo_theme',
 
   init() {
-    // Sincronizar etiqueta inicial
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     this.updateUI(currentTheme);
 
-    // Event listener en el botón conmutador
     if (this.toggleBtn) {
       this.toggleBtn.addEventListener('click', () => this.toggleTheme());
     }
 
-    // Atajo de teclado 'T' para cambiar de tema rápidamente
+    // Atajo de teclado 'T'
     window.addEventListener('keydown', (e) => {
-      if (e.key.toLowerCase() === 't' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+      if (e.key.toLowerCase() === 't' && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
         if (!document.querySelector('.modal-backdrop.active, .command-palette-backdrop.active')) {
           e.preventDefault();
           this.toggleTheme();
@@ -32,7 +30,7 @@ const ThemeEngine = {
       }
     });
 
-    // Detectar cambios en las preferencias del sistema
+    // Sincronizar preferencia del sistema si el usuario no ha elegido manualmente
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem(this.STORAGE_KEY)) {
         this.applyTheme(e.matches ? 'dark' : 'light');
@@ -48,7 +46,6 @@ const ThemeEngine = {
     const current = this.getCurrentTheme();
     const target = current === 'dark' ? 'light' : 'dark';
 
-    // Si el navegador soporta View Transitions API, animación cinematográfica
     if (document.startViewTransition) {
       document.startViewTransition(() => {
         this.applyTheme(target);
@@ -65,9 +62,7 @@ const ThemeEngine = {
     }
     localStorage.setItem(this.STORAGE_KEY, theme);
     this.updateUI(theme);
-
-    // Feedback al usuario
-    Toast.show(`Tema cambiado a ${theme === 'dark' ? 'Modo Oscuro' : 'Modo Claro'}`, 'info');
+    Toast.show(`Tema visual: ${theme === 'dark' ? 'Modo Oscuro (Carbon)' : 'Modo Claro (Ivory)'}`, 'info');
   },
 
   updateUI(theme) {
@@ -81,12 +76,12 @@ const ThemeEngine = {
 };
 
 // ==========================================================================
-// 2. SISTEMA DE TOAST NOTIFICATIONS (FEEDBACK INMEDIATO)
+// 2. SISTEMA DE NOTIFICACIONES TOAST
 // ==========================================================================
 const Toast = {
   container: document.getElementById('toastContainer'),
 
-  show(message, type = 'info', duration = 3500) {
+  show(message, type = 'info', duration = 3200) {
     if (!this.container) return;
 
     const toast = document.createElement('div');
@@ -95,221 +90,375 @@ const Toast = {
     let icon = '';
     if (type === 'success') {
       icon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+    } else if (type === 'error') {
+      icon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
     } else {
       icon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
     }
 
-    toast.innerHTML = `${icon}<span>${message}</span>`;
+    toast.innerHTML = `
+      <span class="toast-icon">${icon}</span>
+      <span class="toast-text">${message}</span>
+    `;
+
     this.container.appendChild(toast);
 
     setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateY(10px) scale(0.95)';
-      toast.style.transition = 'all 200ms ease';
-      setTimeout(() => toast.remove(), 200);
+      toast.classList.add('removing');
+      setTimeout(() => toast.remove(), 250);
     }, duration);
   }
 };
 
 // ==========================================================================
-// 3. BASE DE DATOS LOCAL Y GESTIÓN DE MOVIMIENTOS
+// 3. BASE DE DATOS MULTI-GIRO (RESTAURANTE, CLÍNICA, INMOBILIARIA, ETC.)
 // ==========================================================================
-let transactionsData = [
-  {
-    id: 'TX-94819',
-    concept: 'Pago Recibido — Suscripción Enterprise Q4',
-    client: 'Fintech Solutions Corp',
-    method: 'SPEI Banxico',
-    date: '23 Oct 2026, 09:42',
-    status: 'completed',
-    type: 'in',
-    amount: 145000.00,
-    currency: 'MXN',
-    reference: '012180004928192831',
-    notes: 'Factura SAT CFDI #8921 validada con sello digital.'
+const GiroDataConfig = {
+  restaurante: {
+    name: 'Trattoria Bella Napoli',
+    label: 'Restaurante & Delivery • Plan Pro',
+    phone: '+52 (55) 9225-4012',
+    agentName: 'Valeria (Agente Atendo IA)',
+    kbDoc: 'Menú_Precios_Octubre_2026.pdf',
+    kbPages: '14 páginas aprendidas con recetas y tiempos de cocina',
+    interactions: '1,429',
+    sales: '$84,320',
+    automation: '98.4%',
+    savedTime: '46.5 horas',
+    dialogues: [
+      { speaker: 'Valeria', text: '¡Hola! Buenas tardes, gracias por comunicarte con Trattoria Bella Napoli. ¿Te gustaría ordenar a domicilio o tienes alguna duda sobre nuestra carta?' },
+      { speaker: 'Cliente', text: 'Hola, buenas tardes. ¿Tienen disponible la pizza Diavola en tamaño grande?' },
+      { speaker: 'Valeria', text: '¡Sí, por supuesto! La pizza Diavola grande cuesta $280 pesos y lleva pepperoni artesanal con queso mozzarella fresco. ¿Deseas agregar alguna bebida o postre a tu orden?' },
+      { speaker: 'Cliente', text: 'Sí, agrega un refresco de lata y salsa de la casa por favor.' },
+      { speaker: 'Valeria', text: 'Excelente. Tu orden es: 1 Pizza Diavola grande, 1 refresco y salsa de la casa. Total $345 pesos. ¿A qué dirección te lo enviamos?' }
+    ],
+    items: [
+      {
+        id: 'AT-9021',
+        client: 'Carlos Mendoza',
+        phone: '+52 55 9182 3401',
+        channel: 'Voz IA (2m 14s)',
+        channelType: 'pedidos',
+        time: 'Hoy, 14:22',
+        detail: 'Pizza Diavola grande + Refresco + Salsa de la casa',
+        status: 'Pedido Confirmado',
+        statusType: 'success',
+        amount: 345.00,
+        currency: 'MXN',
+        sentiment: 'Muy Satisfecho (98%)',
+        transcript: 'Cliente ordenó a domicilio a Roma Norte. Tiempo de entrega prometido: 35 min. Pago con tarjeta contra entrega.'
+      },
+      {
+        id: 'AT-9020',
+        client: 'Mariana Soto',
+        phone: '+52 55 4910 8271',
+        channel: 'WhatsApp IA',
+        channelType: 'whatsapp',
+        time: 'Hoy, 13:45',
+        detail: 'Consulta de opciones veganas y reserva mesa para 4 personas',
+        status: 'Mesa #6 Reservada',
+        statusType: 'success',
+        amount: 1200.00,
+        currency: 'MXN',
+        sentiment: 'Positivo (95%)',
+        transcript: 'IA confirmó mesa en terraza para hoy a las 20:30 hrs y envió menú digital en PDF por WhatsApp.'
+      },
+      {
+        id: 'AT-9019',
+        client: 'Roberto Garza',
+        phone: '+52 55 3302 9182',
+        channel: 'Voz IA (1m 18s)',
+        channelType: 'pedidos',
+        time: 'Hoy, 12:50',
+        detail: 'Pregunta por estacionamiento con valet parking y descorche',
+        status: 'Consulta Resuelta',
+        statusType: 'info',
+        amount: 0.00,
+        currency: 'MXN',
+        sentiment: 'Neutral (88%)',
+        transcript: 'Se le informó que el valet parking es en cortesía y el descorche tiene costo de $250 por botella.'
+      },
+      {
+        id: 'AT-9018',
+        client: 'Dra. Elena Vega',
+        phone: '+52 55 8812 0491',
+        channel: 'Voz IA (3m 05s)',
+        channelType: 'pedidos',
+        time: 'Hoy, 11:15',
+        detail: 'Pedido corporativo: 8 Pizzas surtidas para despacho',
+        status: 'En Cocina / Despacho',
+        statusType: 'success',
+        amount: 2480.00,
+        currency: 'MXN',
+        sentiment: 'Excelente (99%)',
+        transcript: 'Factura CFDI 4.0 solicitada con RFC enviado por WhatsApp tras llamada. Comanda en cocina número #402.'
+      }
+    ]
   },
-  {
-    id: 'TX-94818',
-    concept: 'Dispersión de Nómina Quincenal',
-    client: 'Equipo de Ingeniería & Operaciones',
-    method: 'Transferencia Masiva',
-    date: '23 Oct 2026, 08:15',
-    status: 'completed',
-    type: 'out',
-    amount: 98450.00,
-    currency: 'MXN',
-    reference: 'DISP-20261023-99',
-    notes: 'Dispersión a 18 cuentas sin comisión por plan VIP.'
-  },
-  {
-    id: 'TX-94817',
-    concept: 'Cobro Pasarela Stripe Connect',
-    client: 'E-commerce Checkout Store',
-    method: 'Stripe Gateway',
-    date: '22 Oct 2026, 21:04',
-    status: 'completed',
-    type: 'in',
-    amount: 34120.50,
-    currency: 'MXN',
-    reference: 'ch_3N8209481029',
-    notes: 'Liquidación en cuenta en 24 horas.'
-  },
-  {
-    id: 'TX-94816',
-    concept: 'Infraestructura Cloud AWS Multi-Region',
-    client: 'Amazon Web Services LatAm',
-    method: 'Tarjeta Corporativa *4092',
-    date: '22 Oct 2026, 17:30',
-    status: 'pending',
-    type: 'out',
-    amount: 18450.00,
-    currency: 'MXN',
-    reference: 'INV-AWS-2026-10',
-    notes: 'Requiere aprobación de administrador antes de las 18:00.'
-  },
-  {
-    id: 'TX-94815',
-    concept: 'Cobro de Honorarios de Auditoría Externa',
-    client: 'Deloitte Consulting México',
-    method: 'SPEI Inbursa',
-    date: '21 Oct 2026, 14:12',
-    status: 'completed',
-    type: 'in',
-    amount: 62100.00,
-    currency: 'MXN',
-    reference: 'SPEI-884910284',
-    notes: 'Conciliación automática OK.'
-  },
-  {
-    id: 'TX-94814',
-    concept: 'Reembolso Solicitado por Cliente #489',
-    client: 'Comercializadora del Norte',
-    method: 'Devolución Directa',
-    date: '20 Oct 2026, 11:28',
-    status: 'review',
-    type: 'out',
-    amount: 4500.00,
-    currency: 'MXN',
-    reference: 'DEV-94814-REF',
-    notes: 'En revisión por mesa de control antifraude.'
-  }
-];
 
+  clinica: {
+    name: 'Centro Odontológico Dentalis',
+    label: 'Clínica Dental & Ortodoncia • Plan Pro',
+    phone: '+52 (55) 8431-9011',
+    agentName: 'Sofía (Agente de Citas Atendo)',
+    kbDoc: 'Tratamientos_y_Seguros_2026.pdf',
+    kbPages: '8 páginas de aranceles, aseguradoras y preparaciones previas',
+    interactions: '892',
+    sales: '$118,500',
+    automation: '96.8%',
+    savedTime: '38.2 horas',
+    dialogues: [
+      { speaker: 'Sofía', text: '¡Buen día! Gracias por comunicarte con Centro Dentalis. ¿Deseas agendar una valoración o tienes alguna pregunta sobre un tratamiento?' },
+      { speaker: 'Cliente', text: 'Hola, tengo dolor en una muela y quería saber si tienen cita hoy por la tarde.' },
+      { speaker: 'Sofía', text: 'Lamento mucho el malestar. Contamos con un espacio para valoración urgente hoy a las 16:30 hrs con el Dr. Ramos en nuestra sucursal Del Valle. ¿Te aparto ese horario?' },
+      { speaker: 'Cliente', text: 'Sí por favor, a nombre de Patricia Alarcón.' },
+      { speaker: 'Sofía', text: 'Queda confirmada tu cita urgente hoy a las 16:30 hrs, Patricia. Te enviamos recordatorio y ubicación exacta a tu WhatsApp.' }
+    ],
+    items: [
+      {
+        id: 'AT-8105',
+        client: 'Patricia Alarcón',
+        phone: '+52 55 2109 4432',
+        channel: 'Voz IA (1m 45s)',
+        channelType: 'citas',
+        time: 'Hoy, 14:10',
+        detail: 'Cita urgente por molestia dental molar: Dr. Ramos',
+        status: 'Cita Agendada 16:30',
+        statusType: 'success',
+        amount: 850.00,
+        currency: 'MXN',
+        sentiment: 'Muy Agradecida (96%)',
+        transcript: 'Triaje realizado: sin inflamación visible. Cupo confirmado en consultorio 2.'
+      },
+      {
+        id: 'AT-8104',
+        client: 'Lic. Fernando Ortiz',
+        phone: '+52 55 7712 9900',
+        channel: 'WhatsApp IA',
+        channelType: 'whatsapp',
+        time: 'Hoy, 13:20',
+        detail: 'Cotización de alineadores invisibles y cobertura seguro GNP',
+        status: 'Demo Agendada',
+        statusType: 'success',
+        amount: 32000.00,
+        currency: 'MXN',
+        sentiment: 'Interesado (92%)',
+        transcript: 'Se enviaron folletos digitales de ortodoncia invisible y se confirmó cita para escaneo 3D el sábado.'
+      }
+    ]
+  },
+
+  inmobiliaria: {
+    name: 'Metropolitan Real Estate',
+    label: 'Desarrollos Residenciales Polanco • Plan Elite',
+    phone: '+52 (55) 7109-2244',
+    agentName: 'Mateo (Asesor Inmobiliario IA)',
+    kbDoc: 'Brochure_Torre_Skyline_2026.pdf',
+    kbPages: '22 páginas de planos, amenidades, enganches y plusvalía',
+    interactions: '640',
+    sales: '$4,850,000',
+    automation: '99.1%',
+    savedTime: '62.0 horas',
+    dialogues: [
+      { speaker: 'Mateo', text: 'Hola, gracias por comunicarte con Metropolitan Real Estate. ¿Te interesa conocer nuestros departamentos en preventa en Torre Skyline Polanco?' },
+      { speaker: 'Cliente', text: 'Hola, vi su anuncio en Instagram. ¿Qué precio tienen los departamentos de 2 recámaras?' },
+      { speaker: 'Mateo', text: 'Contamos con prototipos de 2 recámaras desde 88 m² a partir de $5.2 millones de pesos, con balcón y 2 cajones de estacionamiento. ¿Te gustaría agendar una visita al departamento muestra este fin de semana?' },
+      { speaker: 'Cliente', text: 'Sí, me interesaría el sábado alrededor de las 11:00 am.' },
+      { speaker: 'Mateo', text: 'Excelente. Te agendé para el sábado a las 11:00 am con nuestro director comercial. Te comparto el acceso al showroom por WhatsApp.' }
+    ],
+    items: [
+      {
+        id: 'AT-7301',
+        client: 'Arq. Gustavo Peralta',
+        phone: '+52 55 6019 3321',
+        channel: 'Voz IA (3m 40s)',
+        channelType: 'citas',
+        time: 'Hoy, 12:45',
+        detail: 'Visita Showroom Torre Skyline: 2 Recámaras 110m²',
+        status: 'Visita Agendada Sáb',
+        statusType: 'success',
+        amount: 5200000.00,
+        currency: 'MXN',
+        sentiment: 'Lead Calificado A+',
+        transcript: 'Capacidad de compra verificada con enganche del 30% listo. Notificación enviada al equipo de ventas.'
+      }
+    ]
+  },
+
+  servicios: {
+    name: 'Legal & Fiscal Consultores',
+    label: 'Asesoría Corporativa & SAT • Plan Pro',
+    phone: '+52 (55) 6049-1123',
+    agentName: 'Valentina (Triaje de Consultas IA)',
+    kbDoc: 'Catalogo_Servicios_Fiscales_2026.pdf',
+    kbPages: '16 páginas de normativas SAT, defensas y honorarios',
+    interactions: '520',
+    sales: '$142,000',
+    automation: '97.5%',
+    savedTime: '41.0 horas',
+    dialogues: [
+      { speaker: 'Valentina', text: 'Buen día, gracias por llamar a Legal & Fiscal Consultores. ¿Requieres asesoría para defensa fiscal, auditoría preventiva o constitución de empresa?' },
+      { speaker: 'Cliente', text: 'Hola, nos llegó una notificación de buzón tributario y necesitamos revisarla.' },
+      { speaker: 'Valentina', text: 'Comprendo. Podemos agendar una sesión inicial de diagnóstico con nuestro socio fiscal para revisar el documento. ¿Te acomoda una llamada técnica hoy a las 17:00 hrs?' }
+    ],
+    items: [
+      {
+        id: 'AT-6102',
+        client: 'Ing. Rodrigo Castillo',
+        phone: '+52 55 8890 1234',
+        channel: 'Voz IA (2m 10s)',
+        channelType: 'citas',
+        time: 'Hoy, 10:30',
+        detail: 'Revisión de requerimiento SAT y opinión de cumplimiento 32-D',
+        status: 'Sesión Agendada',
+        statusType: 'success',
+        amount: 3500.00,
+        currency: 'MXN',
+        sentiment: 'Urgente / Resuelto',
+        transcript: 'Cliente cargó PDF de notificación vía enlace temporal seguro. Socio asignado: Lic. Treviño.'
+      }
+    ]
+  },
+
+  ecommerce: {
+    name: 'NovaStyle Streetwear',
+    label: 'E-commerce & Retail Moda • Plan Scale',
+    phone: '+52 (55) 5519-8800',
+    agentName: 'Camila (Soporte y Envíos IA)',
+    kbDoc: 'Guia_de_Tallas_y_Devoluciones.pdf',
+    kbPages: '10 páginas de políticas DHL/FedEx y tabla de medidas en cm',
+    interactions: '2,180',
+    sales: '$248,900',
+    automation: '99.4%',
+    savedTime: '78.5 horas',
+    dialogues: [
+      { speaker: 'Camila', text: '¡Hola! Gracias por llamar a NovaStyle. ¿Tienes alguna pregunta sobre tu número de guía, cambio de talla o catálogo nuevo?' },
+      { speaker: 'Cliente', text: 'Hola, compré unos tenis el martes y quería saber cuándo me llegan.' },
+      { speaker: 'Camila', text: 'Con gusto. Tu guía DHL 4920194821 está en ruta de entrega hoy antes de las 18:00 hrs en tu domicilio de Guadalajara.' }
+    ],
+    items: [
+      {
+        id: 'AT-5091',
+        client: 'Sebastián Morales',
+        phone: '+52 55 4120 7865',
+        channel: 'Voz IA (1m 02s)',
+        channelType: 'pedidos',
+        time: 'Hoy, 15:02',
+        detail: 'Rastreo de paquete #89421 Sneakers Retro Edición Limitada',
+        status: 'En Ruta DHL',
+        statusType: 'info',
+        amount: 3200.00,
+        currency: 'MXN',
+        sentiment: 'Satisfecho (100%)',
+        transcript: 'Llamada rápida de rastreo resuelta sin intervención humana en 62 segundos.'
+      }
+    ]
+  }
+};
+
+// Variable activa del giro actual
+let currentGiroKey = 'restaurante';
+let activeTransactions = [...GiroDataConfig.restaurante.items];
+
+// ==========================================================================
+// 4. CONTROLADOR DE LA TABLA DE OPERACIONES RECIENTES
+// ==========================================================================
 const TableController = {
-  tbody: document.getElementById('transactionsTableBody'),
+  tbody: document.getElementById('callsTableBody'),
   searchInput: document.getElementById('tableSearchInput'),
-  statusPills: document.getElementById('statusFilterPills'),
-  counterEl: document.getElementById('tableRecordCount'),
-  currentFilter: 'all',
-  currentSearch: '',
+  filterPills: document.getElementById('statusFilterPills'),
+  exportBtn: document.getElementById('btnExportTable'),
+  activeFilter: 'all',
 
   init() {
     this.render();
 
-    // Búsqueda en tiempo real
     if (this.searchInput) {
-      this.searchInput.addEventListener('input', (e) => {
-        this.currentSearch = e.target.value.toLowerCase().trim();
-        this.render();
-      });
+      this.searchInput.addEventListener('input', () => this.render());
     }
 
-    // Filtrado por estado
-    if (this.statusPills) {
-      this.statusPills.addEventListener('click', (e) => {
+    if (this.filterPills) {
+      this.filterPills.addEventListener('click', (e) => {
         const btn = e.target.closest('.status-pill-btn');
         if (!btn) return;
-        this.statusPills.querySelectorAll('.status-pill-btn').forEach(b => b.classList.remove('active'));
+        this.filterPills.querySelectorAll('.status-pill-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        this.currentFilter = btn.dataset.filter;
+        this.activeFilter = btn.dataset.filter || 'all';
         this.render();
       });
     }
 
-    // Exportación de tabla
-    const btnExport = document.getElementById('btnExportTable');
-    if (btnExport) {
-      btnExport.addEventListener('click', () => this.exportCSV());
+    if (this.exportBtn) {
+      this.exportBtn.addEventListener('click', () => this.exportCSV());
     }
+  },
+
+  getFilteredData() {
+    const query = this.searchInput ? this.searchInput.value.toLowerCase().trim() : '';
+    return activeTransactions.filter(item => {
+      const matchesFilter = this.activeFilter === 'all' || item.channelType === this.activeFilter;
+      const matchesQuery = !query ||
+        item.client.toLowerCase().includes(query) ||
+        item.phone.toLowerCase().includes(query) ||
+        item.detail.toLowerCase().includes(query) ||
+        item.id.toLowerCase().includes(query);
+      return matchesFilter && matchesQuery;
+    });
   },
 
   render() {
     if (!this.tbody) return;
+    const data = this.getFilteredData();
 
-    const filtered = transactionsData.filter(item => {
-      const matchFilter = this.currentFilter === 'all' || item.status === this.currentFilter;
-      const matchSearch = !this.currentSearch ||
-        item.concept.toLowerCase().includes(this.currentSearch) ||
-        item.client.toLowerCase().includes(this.currentSearch) ||
-        item.id.toLowerCase().includes(this.currentSearch) ||
-        item.method.toLowerCase().includes(this.currentSearch);
-      return matchFilter && matchSearch;
-    });
-
-    if (this.counterEl) {
-      this.counterEl.textContent = `Mostrando ${filtered.length} de ${transactionsData.length} operaciones`;
-    }
-
-    if (filtered.length === 0) {
+    if (data.length === 0) {
       this.tbody.innerHTML = `
         <tr>
-          <td colspan="6" style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
-            No se encontraron transacciones que coincidan con los criterios de búsqueda.
+          <td colspan="6" style="text-align: center; padding: 36px 20px; color: var(--text-muted);">
+            No se encontraron interacciones con el filtro actual.
           </td>
         </tr>
       `;
       return;
     }
 
-    this.tbody.innerHTML = filtered.map(tx => {
-      const isPositive = tx.type === 'in';
-      const formattedAmount = new Intl.NumberFormat('es-MX', {
-        style: 'currency',
-        currency: 'MXN'
-      }).format(tx.amount);
-
-      let statusBadge = '';
-      if (tx.status === 'completed') {
-        statusBadge = `<span class="status-badge completed"><span class="status-badge-dot"></span>Completado</span>`;
-      } else if (tx.status === 'pending') {
-        statusBadge = `<span class="status-badge pending"><span class="status-badge-dot"></span>Pendiente</span>`;
-      } else {
-        statusBadge = `<span class="status-badge review"><span class="status-badge-dot"></span>En Revisión</span>`;
-      }
+    this.tbody.innerHTML = data.map(item => {
+      const formattedAmount = item.amount > 0
+        ? new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.amount)
+        : '-';
 
       return `
-        <tr onclick="openTransactionDetail('${tx.id}')">
+        <tr class="table-row-clickable" onclick="openInteractionDetail('${item.id}')">
           <td>
-            <div class="table-concept-cell">
-              <div class="concept-icon-wrap ${isPositive ? 'in' : 'out'}">
-                ${isPositive ?
-                  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>` :
-                  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`
-                }
-              </div>
-              <div class="concept-meta">
-                <span class="concept-title">${tx.concept}</span>
-                <span class="concept-id">${tx.id} • ${tx.client}</span>
-              </div>
+            <div class="client-cell">
+              <span class="client-name">${item.client}</span>
+              <span class="client-phone tabular">${item.phone}</span>
             </div>
           </td>
-          <td><span class="text-secondary font-mono">${tx.method}</span></td>
-          <td><span class="text-muted font-mono">${tx.date}</span></td>
-          <td>${statusBadge}</td>
-          <td class="text-right">
-            <span class="amount-val ${isPositive ? 'positive' : 'negative'}">
-              ${isPositive ? '+' : '-'}${formattedAmount}
+          <td>
+            <div class="channel-cell">
+              <span class="channel-badge ${item.channelType}">${item.channel}</span>
+            </div>
+          </td>
+          <td>
+            <div class="detail-cell">
+              <span class="detail-time">${item.time}</span>
+              <span class="detail-desc">${item.detail}</span>
+            </div>
+          </td>
+          <td>
+            <span class="status-chip ${item.statusType}">
+              ${item.status}
             </span>
           </td>
-          <td class="text-center" onclick="event.stopPropagation()">
-            <div class="table-row-actions">
-              <button class="row-action-btn" title="Descargar comprobante" onclick="downloadReceipt('${tx.id}')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              </button>
-              <button class="row-action-btn" title="Ver detalles completos" onclick="openTransactionDetail('${tx.id}')">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-              </button>
-            </div>
+          <td class="text-right">
+            <span class="amount-val ${item.amount > 0 ? 'positive' : 'neutral'} tabular">
+              ${formattedAmount}
+            </span>
+          </td>
+          <td class="text-center">
+            <button class="btn-table-action" onclick="event.stopPropagation(); openInteractionDetail('${item.id}')" title="Ver audio y transcripción completa">
+              Ver detalle
+            </button>
           </td>
         </tr>
       `;
@@ -317,33 +466,40 @@ const TableController = {
   },
 
   exportCSV() {
-    const headers = ['ID', 'Concepto', 'Cliente', 'Metodo', 'Fecha', 'Estado', 'Tipo', 'Monto'];
-    const rows = transactionsData.map(tx => [
-      tx.id,
-      `"${tx.concept}"`,
-      `"${tx.client}"`,
-      tx.method,
-      tx.date,
-      tx.status,
-      tx.type,
-      tx.amount
+    const data = this.getFilteredData();
+    if (data.length === 0) {
+      Toast.show('No hay datos disponibles para exportar', 'error');
+      return;
+    }
+
+    const headers = ['ID', 'Cliente', 'Telefono', 'Canal', 'Fecha_Hora', 'Detalle', 'Resultado_IA', 'Importe_MXN'];
+    const rows = data.map(d => [
+      d.id,
+      `"${d.client}"`,
+      `"${d.phone}"`,
+      `"${d.channel}"`,
+      `"${d.time}"`,
+      `"${d.detail.replace(/"/g, '""')}"`,
+      `"${d.status}"`,
+      d.amount
     ]);
 
-    const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-    const encodedUri = encodeURI(csvContent);
+    const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `nexus_movimientos_${Date.now()}.csv`);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `atendo_reporte_${currentGiroKey}_${Date.now()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    Toast.show('Reporte CSV descargado con éxito', 'success');
+    Toast.show('Reporte CSV exportado exitosamente', 'success');
   }
 };
 
 // ==========================================================================
-// 4. MOTOR DE GRÁFICO INTERACTIVO SVG DE ALTA PRECISIÓN
+// 5. MOTOR DE GRÁFICO INTERACTIVO (LLAMADAS & WHATSAPP)
 // ==========================================================================
 const ChartEngine = {
   svg: document.getElementById('interactiveChartSvg'),
@@ -356,33 +512,33 @@ const ChartEngine = {
 
   dataSets: {
     '7d': [
-      { date: '17 Oct', val: 24500, ops: 8 },
-      { date: '18 Oct', val: 38200, ops: 12 },
-      { date: '19 Oct', val: 29100, ops: 9 },
-      { date: '20 Oct', val: 45000, ops: 15 },
-      { date: '21 Oct', val: 62100, ops: 18 },
-      { date: '22 Oct', val: 48900, ops: 14 },
-      { date: 'Hoy', val: 56400, ops: 16 }
+      { date: '17 Oct', val: 145, ops: 48 },
+      { date: '18 Oct', val: 192, ops: 62 },
+      { date: '19 Oct', val: 160, ops: 51 },
+      { date: '20 Oct', val: 210, ops: 74 },
+      { date: '21 Oct', val: 245, ops: 88 },
+      { date: '22 Oct', val: 280, ops: 95 },
+      { date: 'Hoy', val: 312, ops: 104 }
     ],
     '30d': [
-      { date: '1 Oct', val: 18200, ops: 6 },
-      { date: '5 Oct', val: 29400, ops: 10 },
-      { date: '9 Oct', val: 24800, ops: 8 },
-      { date: '13 Oct', val: 41000, ops: 13 },
-      { date: '17 Oct', val: 36500, ops: 11 },
-      { date: '21 Oct', val: 62100, ops: 18 },
-      { date: '23 Oct', val: 58900, ops: 17 }
+      { date: '1 Oct', val: 110, ops: 35 },
+      { date: '5 Oct', val: 160, ops: 52 },
+      { date: '9 Oct', val: 195, ops: 64 },
+      { date: '13 Oct', val: 230, ops: 79 },
+      { date: '17 Oct', val: 275, ops: 91 },
+      { date: '21 Oct', val: 295, ops: 98 },
+      { date: '23 Oct', val: 342, ops: 115 }
     ],
     '90d': [
-      { date: 'Agosto', val: 310000, ops: 98 },
-      { date: 'Septiembre', val: 440000, ops: 135 },
-      { date: 'Octubre', val: 482320, ops: 148 }
+      { date: 'Agosto', val: 1840, ops: 610 },
+      { date: 'Septiembre', val: 2420, ops: 790 },
+      { date: 'Octubre', val: 3150, ops: 980 }
     ],
     '1y': [
-      { date: 'Q1 2026', val: 980000, ops: 320 },
-      { date: 'Q2 2026', val: 1240000, ops: 410 },
-      { date: 'Q3 2026', val: 1420000, ops: 480 },
-      { date: 'Q4 2026', val: 680000, ops: 210 }
+      { date: 'Q1 2026', val: 5100, ops: 1680 },
+      { date: 'Q2 2026', val: 6800, ops: 2240 },
+      { date: 'Q3 2026', val: 8900, ops: 2950 },
+      { date: 'Q4 2026', val: 4200, ops: 1400 }
     ]
   },
 
@@ -396,7 +552,7 @@ const ChartEngine = {
         this.periodSelector.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         this.render(btn.dataset.period);
-        Toast.show(`Periodo actualizado a ${btn.textContent}`, 'info');
+        Toast.show(`Gráfico actualizado: periodo ${btn.textContent}`, 'info');
       });
     }
   },
@@ -416,7 +572,6 @@ const ChartEngine = {
       return { x, y, data: d };
     });
 
-    // Construir línea suave Bézier
     let lineD = `M ${points[0].x} ${points[0].y}`;
     for (let i = 0; i < points.length - 1; i++) {
       const p0 = points[i === 0 ? i : i - 1];
@@ -437,35 +592,28 @@ const ChartEngine = {
     if (this.linePath) this.linePath.setAttribute('d', lineD);
     if (this.areaPath) this.areaPath.setAttribute('d', areaD);
 
-    // Renderizar círculos interactivos
     if (this.pointsGroup) {
       this.pointsGroup.innerHTML = points.map((p, idx) => `
         <circle class="chart-point" cx="${p.x}" cy="${p.y}" r="4.5" data-idx="${idx}"></circle>
       `).join('');
 
       this.pointsGroup.querySelectorAll('.chart-point').forEach((circle, idx) => {
-        circle.addEventListener('mouseenter', (e) => this.showTooltip(points[idx], circle));
+        circle.addEventListener('mouseenter', () => this.showTooltip(points[idx]));
         circle.addEventListener('mouseleave', () => this.hideTooltip());
       });
     }
   },
 
-  showTooltip(pointObj, circleEl) {
+  showTooltip(pointObj) {
     if (!this.tooltip || !this.wrapper) return;
     const ttDate = document.getElementById('ttDate');
     const ttVal = document.getElementById('ttVal');
     const ttOps = document.getElementById('ttOps');
 
     if (ttDate) ttDate.textContent = pointObj.data.date;
-    if (ttVal) {
-      ttVal.textContent = new Intl.NumberFormat('es-MX', {
-        style: 'currency',
-        currency: 'MXN'
-      }).format(pointObj.data.val);
-    }
-    if (ttOps) ttOps.textContent = `${pointObj.data.ops} transacciones registradas`;
+    if (ttVal) ttVal.textContent = `${pointObj.data.val} interacciones`;
+    if (ttOps) ttOps.textContent = `${pointObj.data.ops} órdenes / citas cerradas`;
 
-    const rect = this.wrapper.getBoundingClientRect();
     const pctX = (pointObj.x / 760) * 100;
     const pctY = (pointObj.y / 240) * 100;
 
@@ -480,7 +628,277 @@ const ChartEngine = {
 };
 
 // ==========================================================================
-// 5. COMMAND PALETTE (MODAL DE ACCESO RÁPIDO ⌘K)
+// 6. SIMULADOR DE LLAMADAS EN VIVO CON AGENTE DE VOZ IA
+// ==========================================================================
+let callTimerInterval = null;
+let callDurationSeconds = 14;
+let currentDialogIndex = 0;
+let isCallMuted = false;
+
+function openCallSimulatorModal() {
+  const modal = document.getElementById('callSimulatorModal');
+  if (!modal) return;
+
+  const giro = GiroDataConfig[currentGiroKey] || GiroDataConfig.restaurante;
+  currentDialogIndex = 0;
+  isCallMuted = false;
+
+  const btnMute = document.getElementById('btnToggleMute');
+  if (btnMute) btnMute.classList.remove('muted');
+
+  const transcriptBox = document.getElementById('callLiveTranscript');
+  if (transcriptBox && giro.dialogues) {
+    transcriptBox.innerHTML = `
+      <div class="transcript-msg agent">
+        <span class="speaker-tag">${giro.dialogues[0].speaker}:</span>
+        <p>${giro.dialogues[0].text}</p>
+      </div>
+    `;
+    currentDialogIndex = 1;
+  }
+
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
+
+  // Iniciar temporizador
+  callDurationSeconds = 1;
+  updateTimerBadge();
+  clearInterval(callTimerInterval);
+  callTimerInterval = setInterval(() => {
+    callDurationSeconds++;
+    updateTimerBadge();
+  }, 1000);
+
+  Toast.show(`Llamada en vivo iniciada con ${giro.agentName}`, 'info');
+}
+
+function updateTimerBadge() {
+  const badge = document.getElementById('callTimerDisplay');
+  if (!badge) return;
+  const mins = String(Math.floor(callDurationSeconds / 60)).padStart(2, '0');
+  const secs = String(callDurationSeconds % 60).padStart(2, '0');
+  badge.textContent = `${mins}:${secs} • En llamada`;
+}
+
+function closeCallSimulatorModal() {
+  const modal = document.getElementById('callSimulatorModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  clearInterval(callTimerInterval);
+  Toast.show('Llamada finalizada: Pedido sincronizado con cocina y CRM', 'success');
+}
+
+function simulateNextDialog() {
+  const giro = GiroDataConfig[currentGiroKey] || GiroDataConfig.restaurante;
+  const transcriptBox = document.getElementById('callLiveTranscript');
+  if (!transcriptBox || !giro.dialogues) return;
+
+  if (currentDialogIndex >= giro.dialogues.length) {
+    Toast.show('La conversación ha concluido. Puedes colgar para guardar la comanda.', 'info');
+    return;
+  }
+
+  const d = giro.dialogues[currentDialogIndex];
+  const msgEl = document.createElement('div');
+  msgEl.className = `transcript-msg ${d.speaker.toLowerCase().includes('cliente') ? 'user' : 'agent'}`;
+  msgEl.innerHTML = `
+    <span class="speaker-tag">${d.speaker}:</span>
+    <p>${d.text}</p>
+  `;
+
+  transcriptBox.appendChild(msgEl);
+  transcriptBox.scrollTop = transcriptBox.scrollHeight;
+  currentDialogIndex++;
+}
+
+function toggleMute() {
+  isCallMuted = !isCallMuted;
+  const btn = document.getElementById('btnToggleMute');
+  if (btn) btn.classList.toggle('muted', isCallMuted);
+  Toast.show(isCallMuted ? 'Micrófono silenciado' : 'Micrófono activo', 'info');
+}
+
+// ==========================================================================
+// 7. MODAL DE NUEVO LEAD / DISPARO DE LLAMADA SALIENTE
+// ==========================================================================
+function openNewLeadModal() {
+  const modal = document.getElementById('newLeadModal');
+  if (modal) {
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => {
+      document.getElementById('leadName')?.focus();
+    }, 100);
+  }
+}
+
+function closeNewLeadModal() {
+  const modal = document.getElementById('newLeadModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+}
+
+function handleNewLeadSubmit(e) {
+  e.preventDefault();
+  const name = document.getElementById('leadName').value;
+  const phone = document.getElementById('leadPhone').value;
+  const objective = document.getElementById('leadObjective')?.value || 'Confirmar Pedido';
+
+  const submitBtn = document.getElementById('btnSubmitLead');
+  const originalHTML = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<span>Valeria marcando a ${phone}...</span>`;
+
+  setTimeout(() => {
+    const newInteraction = {
+      id: `AT-${Math.floor(1000 + Math.random() * 9000)}`,
+      client: name,
+      phone: phone,
+      channel: 'Llamada Saliente IA',
+      channelType: 'pedidos',
+      time: 'Hace un momento',
+      detail: `Llamada inmediata iniciada: ${objective}`,
+      status: 'En Llamada...',
+      statusType: 'info',
+      amount: 420.00,
+      currency: 'MXN',
+      sentiment: 'En progreso',
+      transcript: `Marcación saliente ejecutada vía Vapi/ElevenLabs. Cliente respondió y está en línea con Valeria.`
+    };
+
+    activeTransactions.unshift(newInteraction);
+    TableController.render();
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalHTML;
+    closeNewLeadModal();
+
+    Toast.show(`Llamada disparada exitosamente a ${name} (${phone})`, 'success');
+  }, 900);
+}
+
+// ==========================================================================
+// 8. DRAWER DE DETALLE DE INTERACCIÓN (SLIDE-OVER)
+// ==========================================================================
+function openInteractionDetail(itemId) {
+  const item = activeTransactions.find(t => t.id === itemId);
+  if (!item) return;
+
+  const drawer = document.getElementById('txDetailDrawer');
+  const body = document.getElementById('drawerBodyContent');
+  if (!drawer || !body) return;
+
+  const formattedAmount = item.amount > 0
+    ? new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(item.amount)
+    : '$0.00 MXN';
+
+  body.innerHTML = `
+    <div style="display: flex; align-items: baseline; justify-content: space-between; padding-bottom: 16px;">
+      <div>
+        <span style="font-size: 11px; color: var(--text-muted); font-variant-numeric: tabular-nums;">${item.id}</span>
+        <h4 style="font-size: 18px; font-weight: 700; color: var(--text-primary); margin-top: 4px;">${item.client}</h4>
+      </div>
+      <span class="amount-val positive tabular" style="font-size: 18px;">
+        ${formattedAmount}
+      </span>
+    </div>
+
+    <!-- Reproductor de Audio Simulado -->
+    <div style="background: var(--card-nested-bg); padding: 16px; border-radius: 12px; display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Grabación de la Llamada</span>
+        <span style="font-size: 11px; color: var(--text-secondary); font-variant-numeric: tabular-nums;">02:14 / 02:14</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button style="width: 36px; height: 36px; border-radius: 50%; background: var(--accent-primary); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;" onclick="Toast.show('Reproduciendo grabación de llamada...', 'info')">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <div style="flex: 1; height: 6px; background: var(--card-outer-bg); border-radius: 3px; position: relative; overflow: hidden;">
+          <div style="width: 65%; height: 100%; background: var(--accent-primary); border-radius: 3px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: var(--card-nested-bg); padding: 14px; border-radius: 12px;">
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">CANAL & DURACIÓN</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary);">${item.channel}</span>
+      </div>
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">TELÉFONO</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary); font-variant-numeric: tabular-nums;">${item.phone}</span>
+      </div>
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">HORA</span>
+        <span style="font-size: 12px; color: var(--text-secondary);">${item.time}</span>
+      </div>
+      <div>
+        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">SENTIMIENTO IA</span>
+        <span style="font-size: 12px; color: var(--status-emerald); font-weight: 600;">${item.sentiment}</span>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px;">
+      <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">TRANSCRIPCIÓN Y RESUMEN IA</span>
+      <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; background: var(--card-nested-bg); padding: 14px; border-radius: 8px;">
+        ${item.transcript}
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: auto; padding-top: 14px;">
+      <button style="flex: 1; padding: 10px; border-radius: var(--radius-pill); background: var(--card-nested-bg); font-weight: 600; font-size: 12px; color: var(--text-primary); cursor: pointer; border: none;" onclick="Toast.show('Enviando comanda a impresora de cocina...', 'success')">
+        Reenviar Comanda
+      </button>
+      <button style="flex: 1; padding: 10px; border-radius: var(--radius-pill); background: var(--accent-primary); color: #fff; font-weight: 600; font-size: 12px; cursor: pointer; border: none;" onclick="Toast.show('Mensaje de seguimiento enviado por WhatsApp', 'success')">
+        Contactar por WhatsApp
+      </button>
+    </div>
+  `;
+
+  drawer.classList.add('active');
+  drawer.setAttribute('aria-hidden', 'false');
+}
+
+function closeDrawer() {
+  const drawer = document.getElementById('txDetailDrawer');
+  if (drawer) {
+    drawer.classList.remove('active');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+}
+
+// ==========================================================================
+// 9. CONMUTADOR DE GIRO DE NEGOCIO (VERTICAL SWITCHER)
+// ==========================================================================
+function switchGiro(giroKey) {
+  const config = GiroDataConfig[giroKey];
+  if (!config) return;
+
+  currentGiroKey = giroKey;
+  activeTransactions = [...config.items];
+
+  // Actualizar etiquetas en barra superior y sidebar
+  const nameLabel = document.getElementById('businessNameLabel');
+  const giroLabel = document.getElementById('businessGiroLabel');
+  if (nameLabel) nameLabel.textContent = config.name;
+  if (giroLabel) giroLabel.textContent = config.label;
+
+  // Actualizar documento de Knowledge Base
+  const kbDocTitle = document.getElementById('kbDocTitle');
+  if (kbDocTitle) kbDocTitle.textContent = config.kbDoc;
+
+  // Re-renderizar tabla de transacciones
+  TableController.render();
+
+  Toast.show(`Giro adaptado: ${config.name} (${config.label})`, 'success');
+}
+
+// ==========================================================================
+// 10. COMMAND PALETTE (MODAL DE ACCESO RÁPIDO ⌘K)
 // ==========================================================================
 const CommandPalette = {
   modal: document.getElementById('commandPaletteModal'),
@@ -488,7 +906,6 @@ const CommandPalette = {
   resultsContainer: document.getElementById('cmdPaletteResults'),
 
   init() {
-    // Abrir con ⌘K o Ctrl+K
     window.addEventListener('keydown', (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
@@ -509,7 +926,6 @@ const CommandPalette = {
       });
     }
 
-    // Manejar selección de comandos
     if (this.resultsContainer) {
       this.resultsContainer.addEventListener('click', (e) => {
         const item = e.target.closest('.cmd-result-item');
@@ -518,7 +934,6 @@ const CommandPalette = {
       });
     }
 
-    // Filtrar comandos en tiempo real
     if (this.input) {
       this.input.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
@@ -554,21 +969,21 @@ const CommandPalette = {
   executeCommand(cmd) {
     this.close();
     switch (cmd) {
-      case 'new-op':
-        openNewOpModal();
+      case 'sim-call':
+        openCallSimulatorModal();
+        break;
+      case 'new-lead':
+        openNewLeadModal();
         break;
       case 'toggle-theme':
         ThemeEngine.toggleTheme();
         break;
-      case 'download-statement':
-        TableController.exportCSV();
+      case 'nav-whatsapp':
+        Toast.show('Abriendo WhatsApp Inbox multi-agente...', 'info');
         break;
-      case 'nav-transactions':
+      case 'nav-orders':
         document.getElementById('tableSearchInput')?.focus();
-        Toast.show('Navegando a tabla de transacciones', 'info');
-        break;
-      case 'nav-support':
-        startConciergeChat();
+        Toast.show('Navegando a tabla de pedidos y comandas', 'info');
         break;
       default:
         Toast.show(`Acción ejecutada: ${cmd}`, 'info');
@@ -577,182 +992,8 @@ const CommandPalette = {
 };
 
 // ==========================================================================
-// 6. MODAL DE NUEVA OPERACIÓN
+// 11. OTRAS ACCIONES Y FUNCIONES GLOBALES
 // ==========================================================================
-function openNewOpModal() {
-  const modal = document.getElementById('newOpModal');
-  if (modal) {
-    modal.classList.add('active');
-    modal.setAttribute('aria-hidden', 'false');
-    setTimeout(() => {
-      document.getElementById('opRecipient')?.focus();
-    }, 100);
-  }
-}
-
-function closeNewOpModal() {
-  const modal = document.getElementById('newOpModal');
-  if (modal) {
-    modal.classList.remove('active');
-    modal.setAttribute('aria-hidden', 'true');
-  }
-}
-
-function handleNewOpSubmit(e) {
-  e.preventDefault();
-  const recipient = document.getElementById('opRecipient').value;
-  const amount = parseFloat(document.getElementById('opAmount').value) || 0;
-  const concept = document.getElementById('opConcept').value;
-
-  if (amount <= 0) {
-    Toast.show('Por favor ingresa un monto válido mayor a 0', 'error');
-    return;
-  }
-
-  // Simulación de envío instantáneo
-  const submitBtn = document.getElementById('btnSubmitOp');
-  const originalHTML = submitBtn.innerHTML;
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = `<span>Procesando SPEI...</span>`;
-
-  setTimeout(() => {
-    // Agregar nueva transacción
-    const newTx = {
-      id: `TX-${Math.floor(10000 + Math.random() * 90000)}`,
-      concept: concept,
-      client: recipient,
-      method: 'SPEI Inmediato',
-      date: 'Hace un momento',
-      status: 'completed',
-      type: 'out',
-      amount: amount,
-      currency: 'MXN',
-      reference: `SPEI-BANXICO-${Date.now().toString().slice(-8)}`,
-      notes: 'Operación liquidada en tiempo real sin incidencias.'
-    };
-
-    transactionsData.unshift(newTx);
-    TableController.render();
-
-    // Actualizar saldo visual
-    const balEl = document.getElementById('mainBalanceVal');
-    if (balEl) {
-      let currentNum = 1284950 - amount;
-      balEl.textContent = currentNum.toLocaleString('es-MX');
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = originalHTML;
-    closeNewOpModal();
-
-    Toast.show(`Transferencia de $${amount.toLocaleString('es-MX')} enviada con éxito`, 'success');
-  }, 750);
-}
-
-// ==========================================================================
-// 7. DRAWER DE DETALLE DE TRANSACCIÓN (SLIDE-OVER)
-// ==========================================================================
-function openTransactionDetail(txId) {
-  const tx = transactionsData.find(t => t.id === txId);
-  if (!tx) return;
-
-  const drawer = document.getElementById('txDetailDrawer');
-  const body = document.getElementById('drawerBodyContent');
-  if (!drawer || !body) return;
-
-  const isPositive = tx.type === 'in';
-  const formattedAmount = new Intl.NumberFormat('es-MX', {
-    style: 'currency',
-    currency: 'MXN'
-  }).format(tx.amount);
-
-  body.innerHTML = `
-    <div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
-      <div>
-        <span style="font-size: 11px; color: var(--text-muted); font-family: var(--font-mono);">${tx.id}</span>
-        <h4 style="font-size: 18px; font-weight: 800; color: var(--text-primary); margin-top: 4px;">${tx.concept}</h4>
-      </div>
-      <span class="amount-val ${isPositive ? 'positive' : 'negative'}" style="font-size: 20px;">
-        ${isPositive ? '+' : '-'}${formattedAmount}
-      </span>
-    </div>
-
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: var(--card-nested-bg); padding: 14px; border-radius: 12px; border: 1px solid var(--border-subtle);">
-      <div>
-        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">BENEFICIARIO / ORIGEN</span>
-        <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary);">${tx.client}</span>
-      </div>
-      <div>
-        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">CANAL DE LIQUIDACIÓN</span>
-        <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary); font-family: var(--font-mono);">${tx.method}</span>
-      </div>
-      <div>
-        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">FECHA & HORA</span>
-        <span style="font-size: 12px; color: var(--text-secondary);">${tx.date}</span>
-      </div>
-      <div>
-        <span style="font-size: 10px; color: var(--text-muted); font-weight: 700; display: block;">ESTADO FISCAL</span>
-        <span style="font-size: 12px; color: var(--status-emerald); font-weight: 600;">Timbrado SAT 4.0</span>
-      </div>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 6px;">
-      <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">CLAVE DE RASTREO / REFERENCIA</span>
-      <div style="background: var(--card-nested-bg); padding: 10px 14px; border-radius: 8px; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-subtle);">
-        <span>${tx.reference}</span>
-        <button style="color: var(--accent-primary); font-size: 11px; font-weight: 600;" onclick="navigator.clipboard.writeText('${tx.reference}'); Toast.show('Referencia copiada', 'info');">Copiar</button>
-      </div>
-    </div>
-
-    <div style="display: flex; flex-direction: column; gap: 6px;">
-      <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">NOTAS & AUDITORÍA</span>
-      <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; background: var(--card-nested-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle);">
-        ${tx.notes}
-      </p>
-    </div>
-
-    <div style="display: flex; gap: 10px; margin-top: auto;">
-      <button style="flex: 1; padding: 10px; border-radius: var(--radius-pill); background: var(--card-nested-bg); border: 1px solid var(--border-inner); font-weight: 600; font-size: 12px; color: var(--text-primary);" onclick="downloadReceipt('${tx.id}')">
-        Descargar CFDI / PDF
-      </button>
-      <button style="flex: 1; padding: 10px; border-radius: var(--radius-pill); background: var(--accent-gradient); color: #fff; font-weight: 600; font-size: 12px;" onclick="repeatTransaction('${tx.id}')">
-        Repetir Operación
-      </button>
-    </div>
-  `;
-
-  drawer.classList.add('active');
-  drawer.setAttribute('aria-hidden', 'false');
-}
-
-function closeDrawer() {
-  const drawer = document.getElementById('txDetailDrawer');
-  if (drawer) {
-    drawer.classList.remove('active');
-    drawer.setAttribute('aria-hidden', 'true');
-  }
-}
-
-function downloadReceipt(txId) {
-  Toast.show(`Generando comprobante fiscal para ${txId}...`, 'info');
-  setTimeout(() => {
-    Toast.show(`Comprobante ${txId}.pdf descargado correctamente`, 'success');
-  }, 600);
-}
-
-function repeatTransaction(txId) {
-  closeDrawer();
-  openNewOpModal();
-  Toast.show(`Datos precargados de la operación ${txId}`, 'info');
-}
-
-// ==========================================================================
-// 8. OTRAS ACCIONES RÁPIDAS Y CONCIERGE VIP
-// ==========================================================================
-function approveInvoice(invoiceId) {
-  Toast.show(`Factura ${invoiceId} aprobada exitosamente`, 'success');
-}
-
 function completeTask(checkboxEl) {
   const item = checkboxEl.closest('.radar-task-item');
   if (!item) return;
@@ -760,30 +1001,22 @@ function completeTask(checkboxEl) {
   checkboxEl.classList.toggle('checked');
   if (checkboxEl.classList.contains('checked')) {
     checkboxEl.innerHTML = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/></svg>`;
-    Toast.show('Tarea marcada como completada', 'success');
+    Toast.show('Documento marcado como aprendido por la IA', 'success');
   } else {
     checkboxEl.innerHTML = '';
   }
 }
 
-function openCertModal() {
-  Toast.show('Abriendo portal de Certificados Digitales SAT', 'info');
+function openVoiceSettings() {
+  Toast.show('Abriendo configuración de voz de Valeria (ElevenLabs Cartesia)', 'info');
 }
 
-function toggleSmsAlerts() {
-  Toast.show('Alertas SMS prioritarias activadas para tu línea corporativa', 'success');
-}
-
-function openSecurityLogs() {
-  Toast.show('Descargando bitácora de accesos y firmas WebAuthn...', 'info');
-}
-
-function startConciergeChat() {
-  Toast.show('Conectando en tiempo real con Sofía Valenzuela (Ejecutiva VIP)...', 'info');
+function openUploadModal() {
+  Toast.show('Abriendo diálogo de carga para Menú o Catálogo PDF...', 'info');
 }
 
 // ==========================================================================
-// 9. INICIALIZACIÓN GLOBAL AL CARGAR EL DOM
+// 12. INICIALIZACIÓN GLOBAL AL CARGAR EL DOM
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', () => {
   ThemeEngine.init();
@@ -791,24 +1024,40 @@ document.addEventListener('DOMContentLoaded', () => {
   ChartEngine.init();
   CommandPalette.init();
 
-  // Botón de Nueva Operación
-  document.getElementById('btnOpenNewOp')?.addEventListener('click', openNewOpModal);
-  document.getElementById('btnCloseNewOpModal')?.addEventListener('click', closeNewOpModal);
-  document.getElementById('btnCancelNewOp')?.addEventListener('click', closeNewOpModal);
-
-  // Botones de Ribbon de Acción Rápida
-  document.querySelectorAll('.action-card-pill').forEach(pill => {
-    pill.addEventListener('click', () => {
-      const act = pill.dataset.quickAction;
-      if (act === 'transfer') openNewOpModal();
-      else if (act === 'invoice') Toast.show('Abriendo módulo de Facturación SAT 4.0', 'info');
-      else if (act === 'extract') TableController.exportCSV();
-      else if (act === 'apikey') Toast.show('Gestión de Llaves API y Webhooks en producción', 'info');
+  // Giro selector pills
+  const vPillsWrap = document.getElementById('verticalPills');
+  if (vPillsWrap) {
+    vPillsWrap.addEventListener('click', (e) => {
+      const btn = e.target.closest('.v-pill');
+      if (!btn) return;
+      vPillsWrap.querySelectorAll('.v-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      switchGiro(btn.dataset.giro);
     });
-  });
+  }
 
-  // Botón Concierge
-  document.getElementById('btnContactConcierge')?.addEventListener('click', startConciergeChat);
+  // Botones para abrir Simulador de Llamada de Voz
+  document.getElementById('actionSimCall')?.addEventListener('click', openCallSimulatorModal);
+  document.getElementById('btnTopTestAgent')?.addEventListener('click', openCallSimulatorModal);
+  document.getElementById('btnListenLive')?.addEventListener('click', openCallSimulatorModal);
+  document.getElementById('btnTestVoiceCall')?.addEventListener('click', openCallSimulatorModal);
+
+  // Botón para silenciar llamada
+  document.getElementById('btnToggleMute')?.addEventListener('click', toggleMute);
+
+  // Botón para abrir modal de Nuevo Lead
+  document.getElementById('actionNewLead')?.addEventListener('click', openNewLeadModal);
+  document.getElementById('btnCloseNewLeadModal')?.addEventListener('click', closeNewLeadModal);
+  document.getElementById('btnCancelNewLead')?.addEventListener('click', closeNewLeadModal);
+
+  // Otros botones de acción rápida
+  document.getElementById('actionUpdateMenu')?.addEventListener('click', openUploadModal);
+  document.getElementById('actionLiveChat')?.addEventListener('click', () => {
+    Toast.show('Abriendo bandeja de WhatsApp en vivo con 8 conversaciones', 'info');
+  });
+  document.getElementById('btnWhatsAppQuick')?.addEventListener('click', () => {
+    Toast.show('WhatsApp: 8 mensajes pendientes de atención', 'info');
+  });
 
   // Cerrar Drawer
   document.getElementById('btnCloseDrawer')?.addEventListener('click', closeDrawer);
@@ -816,19 +1065,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.id === 'txDetailDrawer') closeDrawer();
   });
 
-  // Cerrar modal al hacer click fuera
-  document.getElementById('newOpModal')?.addEventListener('click', (e) => {
-    if (e.target.id === 'newOpModal') closeNewOpModal();
+  // Cerrar modal de lead al hacer click fuera
+  document.getElementById('newLeadModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'newLeadModal') closeNewLeadModal();
   });
-
-  // Notificaciones
-  document.getElementById('btnNotifications')?.addEventListener('click', () => {
-    Toast.show('No tienes notificaciones urgentes pendientes', 'info');
-  });
-
-  // Retiro rápido
-  document.getElementById('btnQuickWithdraw')?.addEventListener('click', () => {
-    openNewOpModal();
+  document.getElementById('callSimulatorModal')?.addEventListener('click', (e) => {
+    if (e.target.id === 'callSimulatorModal') closeCallSimulatorModal();
   });
 
   // Menú móvil responsive
@@ -845,10 +1087,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Navegación en sidebar
   document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
-    item.addEventListener('click', (e) => {
+    item.addEventListener('click', () => {
       document.querySelectorAll('.sidebar-nav .nav-item').forEach(i => i.classList.remove('active'));
       item.classList.add('active');
-      Toast.show(`Cambiando a vista: ${item.querySelector('.nav-label')?.textContent}`, 'info');
+      const label = item.querySelector('.nav-label')?.textContent || 'Vista';
+      Toast.show(`Cambiando a: ${label}`, 'info');
     });
   });
 });

@@ -2,16 +2,16 @@
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexus Core — Portal de Clientes</title>
-  <meta name="description" content="Panel de control intuitivo, ágil y de mínima fricción para clientes.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Atendo — Panel de Control y Operaciones IA</title>
+  <meta name="description" content="Automatiza la atención de tu negocio con Agentes de Voz IA y WhatsApp en tiempo real.">
   <meta name="color-scheme" content="dark light">
 
   <!-- Prevención instantánea de FOUC -->
   <script>
     (function() {
       try {
-        const saved = localStorage.getItem('nexus_color_theme');
+        const saved = localStorage.getItem('atendo_theme');
         const theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
         document.documentElement.setAttribute('data-theme', theme);
         const meta = document.querySelector('meta[name="color-scheme"]');
@@ -20,7 +20,7 @@
     })();
   </script>
 
-  <!-- Tipografía: Clash Grotesk de Fontshare -->
+  <!-- Tipografía: Clash Grotesk & Inter Display -->
   <link rel="preconnect" href="https://api.fontshare.com">
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap" rel="stylesheet">
@@ -32,17 +32,23 @@
   <!-- Contenedor Maestro de la Aplicación -->
   <div class="app-layout">
     
-    <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN INTUITIVA) -->
+    <!-- BARRA LATERAL (SIDEBAR NAVEGACIÓN INTUITIVA) -->
     <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-header">
         <div class="brand-monogram">
-          <svg class="brand-icon" viewBox="0 0 28 28" fill="none">
-            <rect width="28" height="28" rx="7" fill="#0066ee"/>
-            <path d="M7 14L12 9L21 19M12 19L21 9" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <div class="brand-icon-box">
+            <!-- Icono Atendo: Onda de voz y conversación -->
+            <svg class="brand-icon" viewBox="0 0 28 28" fill="none">
+              <rect width="28" height="28" rx="8" fill="#ff5a36"/>
+              <path d="M7 14C7 10.134 10.134 7 14 7C17.866 7 21 10.134 21 14C21 17.866 17.866 21 14 21C12.5 21 11.2 20.5 10 19.8L7 21L8.2 18C7.4 16.8 7 15.5 7 14Z" fill="#ffffff" fill-opacity="0.95"/>
+              <circle cx="11.5" cy="14" r="1.2" fill="#ff5a36"/>
+              <circle cx="14" cy="14" r="1.2" fill="#ff5a36"/>
+              <circle cx="16.5" cy="14" r="1.2" fill="#ff5a36"/>
+            </svg>
+          </div>
           <div class="brand-meta">
-            <span class="brand-name">NEXUS<span class="brand-name-suffix">.OS</span></span>
-            <span class="brand-badge">PORTAL CLIENTE</span>
+            <span class="brand-name">Atendo<span class="brand-name-suffix">.lat</span></span>
+            <span class="brand-badge">PANEL CLIENTE IA</span>
           </div>
         </div>
 
@@ -54,13 +60,15 @@
         </button>
       </div>
 
-      <!-- Selector de Empresa / Cuenta Activa -->
+      <!-- Selector de Negocio / Giro Activo -->
       <div class="account-selector-shell">
-        <div class="account-selector-inner">
-          <div class="account-avatar">AC</div>
+        <div class="account-selector-inner" id="businessSelectorBtn">
+          <div class="business-avatar" id="currentGiroIcon">
+            <svg class="giro-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+          </div>
           <div class="account-info">
-            <span class="account-company">Acme LatAm S.A.</span>
-            <span class="account-plan">Cuenta Corporativa</span>
+            <span class="account-company" id="businessNameLabel">Trattoria Bella Napoli</span>
+            <span class="account-plan" id="businessGiroLabel">Restaurante & Delivery • Plan Pro</span>
           </div>
           <svg class="chevron-icon" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -70,7 +78,8 @@
 
       <!-- Enlaces del Menú Principal -->
       <nav class="sidebar-nav">
-        <a href="#resumen" class="nav-item active" data-view="dashboard">
+        <span class="nav-section-title">PRINCIPAL</span>
+        <a href="#inicio" class="nav-item active" data-tab="inicio">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
             <rect x="3" y="3" width="7" height="9" rx="2"/>
             <rect x="14" y="3" width="7" height="5" rx="2"/>
@@ -80,78 +89,88 @@
           <span class="nav-label">Tablero Resumen</span>
         </a>
 
-        <a href="#movimientos" class="nav-item" data-view="transactions">
+        <span class="nav-section-title">ATENCIÓN & VENTAS</span>
+        <a href="#llamadas" class="nav-item" data-tab="llamadas">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
-            <line x1="12" y1="1" x2="12" y2="23"/>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
-          <span class="nav-label">Movimientos y Pagos</span>
-          <span class="nav-counter">24</span>
+          <span class="nav-label">Llamadas y Grabaciones</span>
+          <span class="nav-counter" id="activeCallsBadge">142</span>
         </a>
 
-        <a href="#facturacion" class="nav-item" data-view="billing">
+        <a href="#whatsapp" class="nav-item" data-tab="whatsapp">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
           </svg>
-          <span class="nav-label">Facturación Fiscal</span>
+          <span class="nav-label">WhatsApp Inbox</span>
+          <span class="nav-counter live">8</span>
         </a>
 
-        <a href="#clientes" class="nav-item" data-view="clients">
+        <a href="#pedidos" class="nav-item" data-tab="pedidos">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
+            <polyline points="21 8 21 21 3 21 3 8"/>
+            <rect x="1" y="3" width="22" height="5"/>
+            <line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+          <span class="nav-label" id="ordersNavLabel">Pedidos Capturados</span>
+          <span class="nav-badge-pill hot" id="pendingOrdersCount">3 pend.</span>
+        </a>
+
+        <a href="#leads" class="nav-item" data-tab="leads">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
             <circle cx="9" cy="7" r="4"/>
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
-          <span class="nav-label">Directorio de Cuentas</span>
+          <span class="nav-label">Leads y Prospectos</span>
         </a>
 
-        <a href="#analitica" class="nav-item" data-view="analytics">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
-            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-            <polyline points="17 6 23 6 23 12"/>
-          </svg>
-          <span class="nav-label">Analítica Financiera</span>
-        </a>
-
-        <a href="#seguridad" class="nav-item" data-view="security">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-          </svg>
-          <span class="nav-label">Llaves API y Accesos</span>
-          <span class="nav-badge-pill green">Activo</span>
-        </a>
-
-        <a href="#ajustes" class="nav-item" data-view="settings">
+        <span class="nav-section-title">CONFIGURACIÓN IA</span>
+        <a href="#agentes" class="nav-item" data-tab="agentes">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
-          <span class="nav-label">Configuración</span>
+          <span class="nav-label">Voz y Personalidad IA</span>
+          <span class="nav-badge-pill green">Valeria v2</span>
+        </a>
+
+        <a href="#conocimiento" class="nav-item" data-tab="conocimiento">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="nav-label" id="kbNavLabel">Menú y Preguntas FAQ</span>
+        </a>
+
+        <a href="#integraciones" class="nav-item" data-tab="integraciones">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="nav-icon">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+          <span class="nav-label">Línea & Conexiones</span>
         </a>
       </nav>
 
-      <!-- Tarjeta Inferior de Concierge / Asistencia Inmediata -->
+      <!-- Tarjeta Concierge / Agente Asignado -->
       <div class="sidebar-concierge">
         <div class="concierge-card-shell">
           <div class="concierge-card-inner">
             <div class="concierge-header">
               <div class="concierge-avatar-wrap">
-                <div class="concierge-avatar">SV</div>
-                <span class="concierge-online-dot" title="En línea"></span>
+                <div class="concierge-avatar">AT</div>
+                <span class="concierge-online-dot" title="Línea activa"></span>
               </div>
               <div class="concierge-details">
-                <span class="concierge-name">Sofía Valenzuela</span>
-                <span class="concierge-role">Ejecutiva Asignada 24/7</span>
+                <span class="concierge-name">Valeria IA (Vapi)</span>
+                <span class="concierge-role">+52 (55) 9225-4012</span>
               </div>
             </div>
-            <p class="concierge-text">Asistencia en conciliaciones y límites de cuenta.</p>
-            <button class="concierge-action-btn" id="btnContactConcierge">
-              <span>Iniciar Consulta Directa</span>
+            <p class="concierge-text">Línea activa recibiendo llamadas 24/7 sin desbordamiento humano.</p>
+            <button class="concierge-action-btn" id="btnTestVoiceCall">
+              <span>Probar Llamada en Vivo</span>
               <div class="btn-icon-circle">
                 <svg viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -166,7 +185,7 @@
     <!-- ÁREA PRINCIPAL DE CONTENIDO -->
     <main class="main-viewport">
       
-      <!-- HEADER FLOTANTE TIPO ISLA CON COMANDOS Y BOTÓN CLARO/OSCURO -->
+      <!-- HEADER FLOTANTE TIPO ISLA -->
       <header class="top-command-bar">
         <div class="command-bar-left">
           <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" aria-label="Abrir menú">
@@ -183,18 +202,18 @@
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <span class="search-placeholder">Buscar operación, cliente, factura...</span>
+            <span class="search-placeholder">Buscar llamada, cliente, pedido...</span>
             <kbd class="shortcut-pill"><span class="kbd-mod">⌘</span>K</kbd>
           </div>
         </div>
 
         <div class="command-bar-right">
           
-          <!-- BOTÓN DE MODO CLARO / OSCURO (CONMUTADOR DE ALTO RENDIMIENTO) -->
+          <!-- BOTÓN DE MODO CLARO / OSCURO (CONMUTADOR HÁPTICO) -->
           <button class="theme-toggle-btn" id="themeToggleBtn" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar tema visual (Atajo: T)">
             <div class="theme-toggle-track">
               <div class="theme-toggle-thumb">
-                <!-- Icono de Sol (Modo Claro) -->
+                <!-- Icono de Sol -->
                 <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="5"></circle>
                   <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -206,7 +225,7 @@
                   <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
                   <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                 </svg>
-                <!-- Icono de Luna (Modo Oscuro) -->
+                <!-- Icono de Luna -->
                 <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                 </svg>
@@ -215,60 +234,95 @@
             <span class="theme-label" id="themeTextLabel">Modo Oscuro</span>
           </button>
 
-          <!-- Notificaciones con badge dinámico -->
-          <div class="notification-wrap">
-            <button class="icon-action-btn" id="btnNotifications" aria-label="Notificaciones">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-              <span class="notification-indicator"></span>
-            </button>
-          </div>
+          <!-- Indicador de Notificaciones / WhatsApp en vivo -->
+          <button class="icon-action-btn" id="btnWhatsAppQuick" aria-label="WhatsApp" title="8 mensajes sin leer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span class="notification-indicator"></span>
+          </button>
 
-          <!-- Botón Primario Rápido "+ Nueva Operación" -->
-          <button class="primary-action-pill" id="btnOpenNewOp">
-            <span class="btn-text">+ Nueva Operación</span>
+          <!-- Botón Primario Rápido "Probar Agente IA" -->
+          <button class="primary-action-pill" id="btnTopTestAgent">
+            <span class="btn-text">Probar Agente IA</span>
             <div class="btn-sub-badge">
               <svg viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
               </svg>
             </div>
           </button>
         </div>
       </header>
 
-      <!-- VISTA PRINCIPAL (TABLERO RESUMEN ANTI-FRICCIÓN) -->
+      <!-- VISTA PRINCIPAL SCROLLEABLE -->
       <div class="content-scrollable">
+
+        <!-- SELECTOR DE GIRO DE NEGOCIO (ADAPTACIÓN DE LA IA) -->
+        <div class="vertical-selector-bar">
+          <div class="vertical-pills-wrap" id="verticalPills">
+            <button class="v-pill active" data-giro="restaurante">
+              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+              <span>Restaurante & Delivery</span>
+            </button>
+            <button class="v-pill" data-giro="clinica">
+              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              <span>Clínica & Dental</span>
+            </button>
+            <button class="v-pill" data-giro="inmobiliaria">
+              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M13 21V3l6 4v14"></path></svg>
+              <span>Inmobiliaria</span>
+            </button>
+            <button class="v-pill" data-giro="servicios">
+              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+              <span>Servicios & Asesoría</span>
+            </button>
+            <button class="v-pill" data-giro="ecommerce">
+              <svg class="pill-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+              <span>E-commerce & Retail</span>
+            </button>
+          </div>
+        </div>
 
         <!-- SECCIÓN HERO DE CERO FRICCIÓN -->
         <section class="welcome-hero-section">
           <div class="hero-content">
             <h1 class="hero-title">
-              Buenos días, Alejandro
+              Buenos días, <span class="highlight-brand">Samuel</span>
             </h1>
-            <p class="hero-subtitle">
-              Tu balance está conciliado en tiempo real. Tienes <strong class="text-accent">2 aprobaciones pendientes</strong> para la dispersión de hoy.
+            <p class="hero-subtitle" id="heroDynamicSubtitle">
+              Tu asistente <strong class="text-accent">Valeria</strong> está activa atendiendo llamadas y WhatsApp. Tienes <strong class="text-amber">3 pedidos pendientes de confirmación</strong> para el turno de hoy.
             </p>
           </div>
 
           <!-- BARRA DE ACCIÓN RÁPIDA (REDUCCIÓN RADICAL DE CLICS) -->
           <div class="quick-action-ribbon">
-            <button class="action-card-pill" data-quick-action="transfer">
-              <div class="action-card-icon-wrap icon-cyan">
+            <button class="action-card-pill" id="actionSimCall">
+              <div class="action-card-icon-wrap icon-orange">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Transferencia SPEI</span>
-                <span class="action-sub">Envío inmediato sin costo</span>
+                <span class="action-title">Simular Llamada IA</span>
+                <span class="action-sub">Prueba el audio y respuestas</span>
               </div>
             </button>
 
-            <button class="action-card-pill" data-quick-action="invoice">
-              <div class="action-card-icon-wrap icon-blue">
+            <button class="action-card-pill" id="actionNewLead">
+              <div class="action-card-icon-wrap icon-emerald">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+              </div>
+              <div class="action-card-text">
+                <span class="action-title">Nuevo Lead / Llamada</span>
+                <span class="action-sub">Disparar llamada saliente</span>
+              </div>
+            </button>
+
+            <button class="action-card-pill" id="actionUpdateMenu">
+              <div class="action-card-icon-wrap icon-cyan">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                   <polyline points="14 2 14 8 20 8"/>
@@ -277,163 +331,141 @@
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Emitir Factura SAT</span>
-                <span class="action-sub">Timbrado CFDI 4.0</span>
+                <span class="action-title" id="actionMenuTitle">Actualizar Menú / Precios</span>
+                <span class="action-sub">Subir PDF para la IA</span>
               </div>
             </button>
 
-            <button class="action-card-pill" data-quick-action="extract">
-              <div class="action-card-icon-wrap icon-emerald">
+            <button class="action-card-pill" id="actionLiveChat">
+              <div class="action-card-icon-wrap icon-blue">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                  <polyline points="7 10 12 15 17 10"/>
-                  <line x1="12" y1="15" x2="12" y2="3"/>
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
                 </svg>
               </div>
               <div class="action-card-text">
-                <span class="action-title">Descargar Extracto</span>
-                <span class="action-sub">Libro diario CSV</span>
-              </div>
-            </button>
-
-            <button class="action-card-pill" data-quick-action="apikey">
-              <div class="action-card-icon-wrap icon-amber">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="3"/>
-                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
-              </div>
-              <div class="action-card-text">
-                <span class="action-title">Llaves de Integración</span>
-                <span class="action-sub">Producción y Sandbox</span>
+                <span class="action-title">Chat de WhatsApp</span>
+                <span class="action-sub">Atender en vivo con bot</span>
               </div>
             </button>
           </div>
         </section>
 
-        <!-- BENTO GRID DE MÉTRICAS CLAVE -->
+        <!-- BENTO GRID DE MÉTRICAS OPERATIVAS ATENDO -->
         <section class="metrics-bento-grid">
           
-          <!-- TARJETA 1: BALANCE ACTIVO PRINCIPAL -->
-          <div class="bento-bezel-card balance-card">
+          <!-- TARJETA 1: LLAMADAS IA ATENDIDAS -->
+          <div class="bento-bezel-card">
             <div class="bento-inner-core">
               <div class="kpi-top-row">
                 <div class="kpi-meta">
-                  <span class="kpi-label">Saldo disponible</span>
-                  <span class="currency-tag">Cuenta Clave 9281</span>
+                  <span class="kpi-label">Llamadas atendidas</span>
+                  <span class="currency-tag">Últimos 7 días</span>
                 </div>
                 <div class="delta-badge positive">
-                  <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z"/>
-                  </svg>
-                  <span>+18.4%</span>
+                  <span>98.4% IA</span>
                 </div>
               </div>
 
               <div class="balance-display-row">
                 <div class="balance-number-wrap">
-                  <span class="currency-symbol">$</span>
-                  <span class="balance-value tabular" id="mainBalanceVal">1,284,950</span>
-                  <span class="balance-cents tabular">.40</span>
+                  <span class="balance-value tabular" id="statCallsNumber">142</span>
+                  <span class="kpi-unit">llamadas</span>
                 </div>
-                <button class="mini-bezel-btn" id="btnQuickWithdraw" title="Retirar a cuenta bancaria principal">
-                  <span>Transferir</span>
-                  <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-                  </svg>
+                <button class="mini-bezel-btn" id="btnListenLive">
+                  <span>En vivo</span>
+                  <div class="live-pulse-dot"></div>
                 </button>
               </div>
 
-              <!-- Sparkline SVG de tendencia continua -->
               <div class="kpi-sparkline-wrap">
-                <svg class="sparkline-svg" viewBox="0 0 300 48" preserveAspectRatio="none">
-                  <path class="sparkline-line" d="M0,40 Q30,35 60,38 T120,24 T180,28 T240,12 T300,6" fill="none" stroke="#0066ee" stroke-width="2.5" stroke-linecap="round"/>
+                <svg class="sparkline-svg" viewBox="0 0 300 44" preserveAspectRatio="none">
+                  <path class="sparkline-line" d="M0,35 Q30,28 60,32 T120,18 T180,24 T240,8 T300,5" fill="none" stroke="#ff5a36" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
               </div>
 
               <div class="kpi-footer-row">
-                <span class="kpi-footer-sub">Ingresos retenidos: <strong>$12,400.00</strong></span>
-                <span class="kpi-footer-status">Conciliado hace 3 min</span>
+                <span class="kpi-footer-sub">0 llamadas perdidas</span>
+                <span class="kpi-footer-status text-emerald tabular">100% contestadas</span>
               </div>
             </div>
           </div>
 
-          <!-- TARJETA 2: FACTURACIÓN DEL MES -->
+          <!-- TARJETA 2: VENTAS / PEDIDOS CAPTURADOS -->
           <div class="bento-bezel-card">
             <div class="bento-inner-core">
               <div class="kpi-top-row">
                 <div class="kpi-meta">
-                  <span class="kpi-label">Ingresos del periodo</span>
+                  <span class="kpi-label" id="kpiOrdersLabel">Pedidos capturados por IA</span>
                   <span class="currency-tag">Octubre 2026</span>
                 </div>
                 <div class="delta-badge positive">
-                  <span>+9.2%</span>
+                  <span>+14.8%</span>
                 </div>
               </div>
 
               <div class="kpi-stat-value tabular">
-                <span class="currency-symbol">$</span>482,320<span class="balance-cents tabular">.00</span>
+                <span class="currency-symbol">$</span><span id="statRevenueNumber">14,250</span><span class="balance-cents tabular">.00 MXN</span>
               </div>
 
               <div class="kpi-progress-meta">
                 <div class="progress-bar-shell">
-                  <div class="progress-bar-fill" style="width: 84%;"></div>
+                  <div class="progress-bar-fill" style="width: 76%;"></div>
                 </div>
                 <div class="progress-labels">
-                  <span>Meta mensual: $570k</span>
-                  <span class="highlight-pct">84% alcanzado</span>
+                  <span id="ordersCountSub">38 pedidos confirmados</span>
+                  <span class="highlight-pct">Meta 76%</span>
                 </div>
               </div>
 
               <div class="kpi-footer-row">
-                <span class="kpi-footer-sub">142 cobros procesados</span>
-                <span class="text-emerald tabular">100% efectivas</span>
+                <span class="kpi-footer-sub">Ticket promedio: <strong>$375 MXN</strong></span>
+                <span class="text-accent font-semibold" onclick="openOrdersTab()">Ver comandas ↗</span>
               </div>
             </div>
           </div>
 
-          <!-- TARJETA 3: CUENTAS POR PAGAR / APROBACIONES -->
+          <!-- TARJETA 3: VELOCIDAD Y TIEMPO DE RESPUESTA -->
           <div class="bento-bezel-card">
             <div class="bento-inner-core">
               <div class="kpi-top-row">
                 <div class="kpi-meta">
-                  <span class="kpi-label">Por aprobar hoy</span>
-                  <span class="currency-tag">2 pagos pendientes</span>
+                  <span class="kpi-label">Latencia de voz IA</span>
+                  <span class="currency-tag">ElevenLabs Turbo 2.5</span>
                 </div>
-                <div class="delta-badge warning">
-                  <span>Atención</span>
+                <div class="delta-badge positive">
+                  <span>Ultrarrápido</span>
                 </div>
               </div>
 
-              <div class="kpi-stat-value text-amber tabular">
-                <span class="currency-symbol">$</span>18,450<span class="balance-cents tabular">.00</span>
+              <div class="kpi-stat-value text-emerald tabular">
+                0.78<span class="balance-cents tabular"> seg</span>
               </div>
 
               <div class="kpi-urgency-box">
                 <div class="urgency-item">
-                  <div class="urgency-dot"></div>
+                  <div class="urgency-dot live"></div>
                   <div class="urgency-info">
-                    <span class="urgency-dest">Servicios Cloud AWS</span>
-                    <span class="urgency-date">Vence hoy 18:00 hrs</span>
+                    <span class="urgency-dest">Voz Valeria (Español Neutro)</span>
+                    <span class="urgency-date text-muted">Interrupciones naturales activadas</span>
                   </div>
-                  <button class="btn-table-action approve" onclick="approveInvoice('AWS-9812')">Aprobar</button>
+                  <button class="btn-table-action approve" onclick="openVoiceSettings()">Ajustar</button>
                 </div>
               </div>
 
               <div class="kpi-footer-row">
-                <span class="kpi-footer-sub">Aprobación en 1-clic</span>
-                <span class="kpi-footer-link" id="btnViewAllPending">Ver todas (2)</span>
+                <span class="kpi-footer-sub">Minutos consumidos: 184 / 500</span>
+                <span class="kpi-footer-link" onclick="openIntegrations()">Plan Pro</span>
               </div>
             </div>
           </div>
 
-          <!-- TARJETA 4: ESTADO DE SEGURIDAD -->
+          <!-- TARJETA 4: ESTADO DE CANALES Y CONEXIONES -->
           <div class="bento-bezel-card">
             <div class="bento-inner-core">
               <div class="kpi-top-row">
                 <div class="kpi-meta">
-                  <span class="kpi-label">Seguridad y dispositivos</span>
-                  <span class="currency-tag">Firma criptográfica</span>
+                  <span class="kpi-label">Canales conectados</span>
+                  <span class="currency-tag">Integraciones en vivo</span>
                 </div>
                 <div class="security-status-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2">
@@ -444,32 +476,32 @@
               </div>
 
               <div class="kpi-security-content">
-                <div class="security-headline">Nivel de Protección: <strong>Óptimo</strong></div>
+                <div class="security-headline">Servicios 100% operativos:</div>
                 <ul class="security-checks">
-                  <li><span class="check-dot"></span> Doble Factor Enrolado</li>
-                  <li><span class="check-dot"></span> IP Segura Verificada</li>
-                  <li><span class="check-dot"></span> Cifrado TLS 1.3 Activo</li>
+                  <li><span class="check-dot"></span> Teléfono Twilio: +52 55 9225-4012</li>
+                  <li><span class="check-dot"></span> WhatsApp Business API Meta</li>
+                  <li><span class="check-dot"></span> Despacho y Alertas Telegram</li>
                 </ul>
               </div>
 
               <div class="kpi-footer-row">
-                <span class="kpi-footer-sub">Última sesión: 12 min</span>
-                <span class="kpi-footer-link" onclick="openSecurityLogs()">Auditoría</span>
+                <span class="kpi-footer-sub">Vapi Engine v2.7</span>
+                <span class="kpi-footer-link" onclick="openIntegrations()">Ver estado</span>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- SECCIÓN PRINCIPAL: GRÁFICO DINÁMICO + ASISTENTE -->
+        <!-- SECCIÓN BIDIRECCIONAL: GRÁFICO EJECUTIVO + ASISTENTE VALERIA -->
         <section class="dashboard-split-grid">
           
-          <!-- COLUMNA IZQUIERDA: GRÁFICO DE FLUJO DE EFECTIVO -->
+          <!-- COLUMNA IZQUIERDA: GRÁFICO DINÁMICO DE LLAMADAS Y CONVERSIONES -->
           <div class="bento-bezel-card chart-container-card">
             <div class="bento-inner-core">
               <div class="card-header-bar">
                 <div>
-                  <h2 class="section-title">Flujo de Fondos y Operaciones</h2>
-                  <p class="section-desc">Monitoreo continuo de cobros y dispersiones en tiempo real</p>
+                  <h2 class="section-title">Volumen de Llamadas y Conversión</h2>
+                  <p class="section-desc">Llamadas entrantes vs pedidos y citas cerradas por la IA</p>
                 </div>
 
                 <div class="chart-controls">
@@ -485,65 +517,66 @@
               <!-- Canvas / SVG interactivo del gráfico -->
               <div class="chart-canvas-wrapper" id="chartCanvasWrapper">
                 <div class="chart-tooltip" id="chartTooltip">
-                  <div class="tooltip-date" id="ttDate">18 Oct 2026</div>
-                  <div class="tooltip-val" id="ttVal">$48,290.00 MXN</div>
-                  <div class="tooltip-detail" id="ttOps">14 transacciones</div>
+                  <div class="tooltip-date" id="ttDate">18 Octubre</div>
+                  <div class="tooltip-val" id="ttVal">24 llamadas atendidas</div>
+                  <div class="tooltip-detail" id="ttOps">8 pedidos generados ($3,120)</div>
                 </div>
                 
                 <svg class="interactive-chart-svg" id="interactiveChartSvg" viewBox="0 0 760 260" preserveAspectRatio="none">
-                  <!-- Líneas guía horizontales de referencia -->
                   <line x1="0" y1="40" x2="760" y2="40" class="chart-grid-line"/>
                   <line x1="0" y1="100" x2="760" y2="100" class="chart-grid-line"/>
                   <line x1="0" y1="160" x2="760" y2="160" class="chart-grid-line"/>
                   <line x1="0" y1="220" x2="760" y2="220" class="chart-grid-line"/>
 
-                  <!-- Línea principal del gráfico -->
-                  <path id="chartLinePath" class="chart-line" fill="none" stroke="#0066ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
+                  <!-- Línea principal naranja atendo -->
+                  <path id="chartLinePath" class="chart-line" fill="none" stroke="#ff5a36" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/>
 
-                  <!-- Puntos interactivos generados dinámicamente -->
+                  <!-- Puntos interactivos -->
                   <g id="chartPointsGroup"></g>
                 </svg>
 
                 <div class="chart-x-labels">
-                  <span>1 Oct</span>
-                  <span>7 Oct</span>
-                  <span>14 Oct</span>
-                  <span>21 Oct</span>
+                  <span>Lun</span>
+                  <span>Mar</span>
+                  <span>Mié</span>
+                  <span>Jue</span>
+                  <span>Vie</span>
+                  <span>Sáb</span>
                   <span>Hoy</span>
                 </div>
               </div>
 
-              <!-- Estadísticas rápidas debajo del gráfico -->
+              <!-- Métricas del Dock -->
               <div class="chart-metrics-dock">
                 <div class="dock-item">
                   <span class="dock-label">Promedio Diario</span>
-                  <span class="dock-val tabular">$16,077.30</span>
+                  <span class="dock-val tabular">22 llamadas</span>
                 </div>
                 <div class="dock-divider"></div>
                 <div class="dock-item">
-                  <span class="dock-label">Pico Más Alto</span>
-                  <span class="dock-val text-emerald tabular">$62,100.00</span>
+                  <span class="dock-label">Hora Pico</span>
+                  <span class="dock-val text-amber tabular">14:00 - 15:30 hrs</span>
                 </div>
                 <div class="dock-divider"></div>
                 <div class="dock-item">
-                  <span class="dock-label">Tasa de Aprobación</span>
-                  <span class="dock-val text-cyan tabular">99.82%</span>
+                  <span class="dock-label">Tasa de Cierre</span>
+                  <span class="dock-val text-emerald tabular">32.6%</span>
                 </div>
                 <div class="dock-divider"></div>
                 <div class="dock-item">
-                  <span class="dock-label">Comisiones Ahorradas</span>
-                  <span class="dock-val text-blue tabular">$3,420.00</span>
+                  <span class="dock-label">Tiempo Ahorrado</span>
+                  <span class="dock-val text-accent tabular">18.5 horas</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- COLUMNA DERECHA: RADAR DE ACCIONES -->
+          <!-- COLUMNA DERECHA: RADAR DE LA BASE DE CONOCIMIENTO (PDF / MENÚ) -->
           <div class="bento-bezel-card radar-card">
             <div class="bento-inner-core">
               <div class="card-header-bar">
-                <h2 class="section-title">Asistente de Fricción Cero</h2>
-                <span class="badge-tag">2 Tareas</span>
+                <h2 class="section-title">Base de Conocimiento IA</h2>
+                <span class="badge-tag">Sincronizado</span>
               </div>
 
               <div class="radar-tasks-list">
@@ -554,63 +587,66 @@
                     </svg>
                   </div>
                   <div class="task-body">
-                    <span class="task-title">Conciliación bancaria Q3</span>
-                    <span class="task-sub">Cerrada automáticamente sin discrepancias</span>
+                    <span class="task-title" id="kbDocTitle">Menú_Precios_Octubre_2026.pdf</span>
+                    <span class="task-sub">14 páginas aprendidas con precios exactos</span>
                   </div>
                 </div>
 
-                <div class="radar-task-item pending">
-                  <div class="task-checkbox-mock" onclick="completeTask(this)"></div>
-                  <div class="task-body">
-                    <span class="task-title">Validación de Certificados SAT</span>
-                    <span class="task-sub">Faltan 14 días para renovación</span>
-                  </div>
-                  <button class="task-action-link" onclick="openCertModal()">Actualizar</button>
-                </div>
-
-                <div class="radar-task-item pending">
-                  <div class="task-checkbox-mock" onclick="completeTask(this)"></div>
-                  <div class="task-body">
-                    <span class="task-title">Activar Alertas de Dispersión</span>
-                    <span class="task-sub">Notificación para cobros mayores a $50k</span>
-                  </div>
-                  <button class="task-action-link" onclick="toggleSmsAlerts()">Activar</button>
-                </div>
-              </div>
-
-              <!-- Tarjeta Corporativa -->
-              <div class="virtual-card-preview">
-                <div class="virtual-card-header">
-                  <span class="vc-label">Tarjeta Corporativa Activa</span>
-                  <span class="vc-brand">PLATINUM VIP</span>
-                </div>
-                <div class="vc-chip-row">
-                  <div class="vc-chip"></div>
-                  <div class="vc-contactless">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
-                      <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
-                      <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <div class="radar-task-item done">
+                  <div class="task-checkbox-mock checked">
+                    <svg viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                     </svg>
                   </div>
+                  <div class="task-body">
+                    <span class="task-title">Horarios y Política de Envío</span>
+                    <span class="task-sub">Lunes a Domingo 12:00 a 23:00 hrs</span>
+                  </div>
                 </div>
-                <div class="vc-number tabular">•••• •••• •••• 4092</div>
-                <div class="vc-footer">
-                  <div class="vc-holder">
-                    <span class="vc-sub">TITULAR</span>
-                    <span class="vc-val">ALEJANDRO MORALES</span>
+
+                <div class="radar-task-item pending">
+                  <div class="task-checkbox-mock" onclick="completeTask(this)"></div>
+                  <div class="task-body">
+                    <span class="task-title">Especiales de Temporada (Otoño)</span>
+                    <span class="task-sub">Falta cargar lista de platillos nuevos</span>
                   </div>
-                  <div class="vc-exp">
-                    <span class="vc-sub">EXP</span>
-                    <span class="vc-val tabular">11/29</span>
-                  </div>
+                  <button class="task-action-link" onclick="openUploadModal()">Cargar</button>
                 </div>
               </div>
+
+              <!-- Tarjeta de Voz en Vivo -->
+              <div class="voice-card-preview">
+                <div class="vc-header">
+                  <div class="vc-avatar">
+                    <svg class="mic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                  </div>
+                  <div class="vc-meta">
+                    <span class="vc-title">Valeria — Agente de Voz</span>
+                    <span class="vc-status">En espera de llamadas</span>
+                  </div>
+                </div>
+                <div class="vc-wave-box">
+                  <div class="wave-bar b1"></div>
+                  <div class="wave-bar b2"></div>
+                  <div class="wave-bar b3"></div>
+                  <div class="wave-bar b4"></div>
+                  <div class="wave-bar b5"></div>
+                  <div class="wave-bar b6"></div>
+                  <div class="wave-bar b7"></div>
+                </div>
+                <button class="btn-voice-test-full" onclick="openCallSimulatorModal()">
+                  <svg viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                  </svg>
+                  <span>Probar Llamada Interactiva Ahora</span>
+                </button>
+              </div>
+
             </div>
           </div>
         </section>
 
-        <!-- SECCIÓN DE TABLA DE MOVIMIENTOS RECIENTES -->
+        <!-- SECCIÓN DE TABLA DE ACTIVIDAD EN TIEMPO REAL -->
         <section class="transactions-section">
           <div class="bento-bezel-card">
             <div class="bento-inner-core">
@@ -618,8 +654,8 @@
               <!-- Barra de Control de la Tabla -->
               <div class="table-action-bar">
                 <div class="table-title-group">
-                  <h2 class="section-title">Últimos Movimientos y Transacciones</h2>
-                  <span class="record-counter" id="tableRecordCount">Mostrando 6 operaciones</span>
+                  <h2 class="section-title">Llamadas y Pedidos en Tiempo Real</h2>
+                  <span class="record-counter" id="tableRecordCount">Mostrando 6 registros</span>
                 </div>
 
                 <div class="table-filters-group">
@@ -629,19 +665,19 @@
                       <circle cx="11" cy="11" r="8"/>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
-                    <input type="text" id="tableSearchInput" placeholder="Filtrar por cliente, concepto o ID..." autocomplete="off">
+                    <input type="text" id="tableSearchInput" placeholder="Buscar por cliente, teléfono o pedido..." autocomplete="off">
                   </div>
 
-                  <!-- Filtro por Estado -->
+                  <!-- Filtro por Canal / Estado -->
                   <div class="status-filter-pills" id="statusFilterPills">
                     <button class="status-pill-btn active" data-filter="all">Todos</button>
-                    <button class="status-pill-btn" data-filter="completed">Completados</button>
-                    <button class="status-pill-btn" data-filter="pending">Pendientes</button>
-                    <button class="status-pill-btn" data-filter="review">En Revisión</button>
+                    <button class="status-pill-btn" data-filter="pedidos">Pedidos</button>
+                    <button class="status-pill-btn" data-filter="citas">Citas / Demos</button>
+                    <button class="status-pill-btn" data-filter="whatsapp">WhatsApp</button>
                   </div>
 
                   <!-- Botón Exportar Rápido -->
-                  <button class="export-btn" id="btnExportTable" title="Exportar vista actual a CSV">
+                  <button class="export-btn" id="btnExportTable" title="Exportar a CSV">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="7 10 12 15 17 10"/>
@@ -654,26 +690,26 @@
 
               <!-- Contenedor Responsivo de la Tabla -->
               <div class="table-responsive-wrapper">
-                <table class="data-table" id="transactionsTable">
+                <table class="data-table" id="callsTable">
                   <thead>
                     <tr>
-                      <th>CONCEPTO Y BENEFICIARIO</th>
-                      <th>CANAL Y MÉTODO</th>
-                      <th>FECHA Y HORA</th>
-                      <th>ESTADO</th>
-                      <th class="text-right">MONTO TOTAL</th>
+                      <th>CLIENTE Y CONTACTO</th>
+                      <th>CANAL Y DURACIÓN</th>
+                      <th>HORA Y DETALLE</th>
+                      <th>RESULTADO IA</th>
+                      <th class="text-right">IMPORTE / VALOR</th>
                       <th class="text-center">ACCIONES</th>
                     </tr>
                   </thead>
-                  <tbody id="transactionsTableBody">
-                    <!-- Filas inyectadas por JavaScript -->
+                  <tbody id="callsTableBody">
+                    <!-- Inyectado dinámicamente por app.js -->
                   </tbody>
                 </table>
               </div>
 
-              <!-- Paginación y Estado -->
+              <!-- Paginación -->
               <div class="table-footer-bar">
-                <span class="table-note">Operaciones procesadas con conciliación directa SPEI</span>
+                <span class="table-note">Sincronizado en tiempo real con Twilio Voice y Meta WhatsApp Webhook</span>
                 <div class="pagination-controls">
                   <button class="pagi-btn" disabled>Anterior</button>
                   <span class="pagi-page">Página <strong>1</strong> de 1</span>
@@ -690,17 +726,87 @@
 
   </div>
 
-  <!-- MODAL DE NUEVA OPERACIÓN -->
-  <div class="modal-backdrop" id="newOpModal" aria-hidden="true">
+  <!-- MODAL 1: SIMULADOR DE LLAMADA CON AGENTE DE VOZ EN VIVO -->
+  <div class="modal-backdrop" id="callSimulatorModal" aria-hidden="true">
+    <div class="modal-bezel-shell call-modal-shell">
+      <div class="modal-inner-core call-modal-core">
+        
+        <div class="call-modal-top">
+          <div class="call-avatar-ring">
+            <div class="call-avatar-inner">
+              <svg class="mic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            </div>
+          </div>
+          <h3 class="call-agent-name">Valeria — Agente Atendo IA</h3>
+          <span class="call-timer-badge" id="callTimerDisplay">00:14 • En llamada</span>
+        </div>
+
+        <!-- Ondas de voz animadas -->
+        <div class="live-call-wave" id="liveCallWave">
+          <div class="wave-col h-1"></div>
+          <div class="wave-col h-3"></div>
+          <div class="wave-col h-5"></div>
+          <div class="wave-col h-7"></div>
+          <div class="wave-col h-4"></div>
+          <div class="wave-col h-6"></div>
+          <div class="wave-col h-2"></div>
+        </div>
+
+        <!-- Transcripción en vivo turn-by-turn -->
+        <div class="call-live-transcript" id="callLiveTranscript">
+          <div class="transcript-msg agent">
+            <span class="speaker-tag">Valeria:</span>
+            <p>¡Hola! Buenas tardes, gracias por comunicarte con Trattoria Bella Napoli. ¿Te gustaría ordenar para entrega a domicilio o tienes alguna pregunta sobre nuestro menú?</p>
+          </div>
+          <div class="transcript-msg user">
+            <span class="speaker-tag">Tú:</span>
+            <p>Hola, buenas tardes. ¿Tienen disponible la pizza Diavola en tamaño grande?</p>
+          </div>
+          <div class="transcript-msg agent">
+            <span class="speaker-tag">Valeria:</span>
+            <p>¡Sí, por supuesto! La pizza Diavola grande cuesta $280 pesos y lleva pepperoni artesanal y mozzarella fresca. ¿Te gustaría agregarla a tu pedido con alguna bebida?</p>
+          </div>
+        </div>
+
+        <!-- Botones de Control de la Llamada -->
+        <div class="call-controls-bar">
+          <button class="call-ctrl-btn" id="btnToggleMute" title="Silenciar micrófono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
+
+          <button class="call-hangup-btn" id="btnHangUp" title="Finalizar llamada" onclick="closeCallSimulatorModal()">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.996.996 0 0 1 0-1.41C3.28 8.78 7.42 7 12 7s8.72 1.78 11.71 4.67c.39.39.39 1.02 0 1.41l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/>
+            </svg>
+          </button>
+
+          <button class="call-ctrl-btn" id="btnNextPrompt" title="Simular respuesta del cliente" onclick="simulateNextDialog()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: NUEVO LEAD / DISPARO DE LLAMADA SALIENTE -->
+  <div class="modal-backdrop" id="newLeadModal" aria-hidden="true">
     <div class="modal-bezel-shell">
       <div class="modal-inner-core">
         
         <div class="modal-header">
           <div class="modal-title-group">
-            <h3 class="modal-title">Nueva Operación Inmediata</h3>
-            <p class="modal-subtitle">Transferencia, cobro o pago de servicio sin fricción</p>
+            <h3 class="modal-title">Disparar Llamada con IA</h3>
+            <p class="modal-subtitle">Valeria llamará al cliente de inmediato para agendar o confirmar</p>
           </div>
-          <button class="modal-close-btn" id="btnCloseNewOpModal" aria-label="Cerrar modal">
+          <button class="modal-close-btn" id="btnCloseNewLeadModal" aria-label="Cerrar modal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -708,95 +814,59 @@
           </button>
         </div>
 
-        <form class="modal-form" id="newOpForm" onsubmit="handleNewOpSubmit(event)">
-          <!-- Tipo de operación -->
-          <div class="form-type-tabs">
-            <label class="type-tab-option">
-              <input type="radio" name="opType" value="spei" checked>
-              <span class="type-tab-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"/>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-                Transferencia SPEI
-              </span>
-            </label>
-            <label class="type-tab-option">
-              <input type="radio" name="opType" value="cobro">
-              <span class="type-tab-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="2" y="5" width="20" height="14" rx="2"/>
-                  <line x1="2" y1="10" x2="22" y2="10"/>
-                </svg>
-                Generar Cobro
-              </span>
-            </label>
-            <label class="type-tab-option">
-              <input type="radio" name="opType" value="pago">
-              <span class="type-tab-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                  <polyline points="14 2 14 8 20 8"/>
-                </svg>
-                Pago de Servicio
-              </span>
-            </label>
-          </div>
-
+        <form class="modal-form" id="newLeadForm" onsubmit="handleNewLeadSubmit(event)">
           <div class="form-grid">
             <div class="form-group full-width">
-              <label for="opRecipient">Beneficiario o Cuenta CLABE</label>
+              <label for="leadName">Nombre del Cliente / Contacto</label>
               <div class="input-with-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                   <circle cx="12" cy="7" r="4"/>
                 </svg>
-                <input type="text" id="opRecipient" placeholder="Ej: 012180015693829101 o Empresa S.A." required>
-              </div>
-              <span class="input-hint">Ingresa CLABE de 18 dígitos o nombre del destinatario frecuente</span>
-            </div>
-
-            <div class="form-group">
-              <label for="opAmount">Monto a Enviar (MXN)</label>
-              <div class="input-with-icon">
-                <span class="input-prefix">$</span>
-                <input type="number" id="opAmount" step="0.01" min="1" placeholder="0.00" class="tabular text-lg" required>
+                <input type="text" id="leadName" placeholder="Ej: Carlos Mendoza" required>
               </div>
             </div>
 
             <div class="form-group">
-              <label for="opConcept">Concepto de Pago</label>
+              <label for="leadPhone">Teléfono Móvil (WhatsApp / Voz)</label>
               <div class="input-with-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="4" y1="9" x2="20" y2="9"/>
-                  <line x1="4" y1="15" x2="20" y2="15"/>
-                  <line x1="10" y1="3" x2="8" y2="21"/>
-                  <line x1="16" y1="3" x2="14" y2="21"/>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
-                <input type="text" id="opConcept" placeholder="Ej: Pago Factura 1042" required>
+                <input type="tel" id="leadPhone" placeholder="+52 55 1234 5678" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="leadObjective">Objetivo de la Llamada</label>
+              <div class="input-with-icon">
+                <select id="leadObjective" style="background:transparent; border:none; width:100%; color:inherit;">
+                  <option value="confirmacion_pedido">Confirmar Pedido Reciente</option>
+                  <option value="agendar_cita">Agendar Cita / Demostración</option>
+                  <option value="seguimiento">Seguimiento de Cotización</option>
+                </select>
               </div>
             </div>
           </div>
 
-          <!-- Resumen de Costo Cero para el Cliente -->
           <div class="modal-summary-box">
             <div class="summary-line">
-              <span>Comisión de transacción:</span>
-              <span class="text-emerald tabular">$0.00 MXN (Bonificada)</span>
+              <span>Línea emisora:</span>
+              <span class="text-emerald tabular">+52 (55) 9225-4012 (Verificada)</span>
             </div>
             <div class="summary-line">
-              <span>Tiempo de liquidación:</span>
-              <span class="tabular text-cyan">Inmediato</span>
+              <span>Grabación y Transcripción:</span>
+              <span class="tabular text-accent">Automática en tu CRM</span>
             </div>
           </div>
 
           <div class="modal-actions-bar">
-            <button type="button" class="btn-cancel" id="btnCancelNewOp">Cancelar</button>
-            <button type="submit" class="btn-submit-op" id="btnSubmitOp">
-              <span>Confirmar y Autorizar</span>
+            <button type="button" class="btn-cancel" id="btnCancelNewLead">Cancelar</button>
+            <button type="submit" class="btn-submit-op" id="btnSubmitLead">
+              <span>Iniciar Llamada con Valeria</span>
               <div class="btn-icon-circle">
                 <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                  <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
                 </svg>
               </div>
             </button>
@@ -815,17 +885,17 @@
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" id="cmdPaletteInput" placeholder="Escribe un comando o busca algo..." autocomplete="off">
+        <input type="text" id="cmdPaletteInput" placeholder="Escribe un comando o busca en Atendo..." autocomplete="off">
         <kbd class="shortcut-pill">ESC</kbd>
       </div>
 
       <div class="command-palette-results" id="cmdPaletteResults">
         <div class="cmd-group-title">ACCIONES FRECUENTES</div>
-        <div class="cmd-result-item" data-cmd="new-op">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <div class="cmd-result-item" data-cmd="sim-call">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           <div class="cmd-meta">
-            <span class="cmd-title">Nueva Operación SPEI</span>
-            <span class="cmd-sub">Iniciar un envío de fondos inmediato</span>
+            <span class="cmd-title">Probar Llamada con Agente de Voz IA</span>
+            <span class="cmd-sub">Abrir simulador con transcripción en vivo</span>
           </div>
           <kbd class="cmd-shortcut">Enter</kbd>
         </div>
@@ -833,34 +903,34 @@
         <div class="cmd-result-item" data-cmd="toggle-theme">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           <div class="cmd-meta">
-            <span class="cmd-title">Alternar Modo Claro y Oscuro</span>
+            <span class="cmd-title">Alternar Modo Claro / Modo Oscuro</span>
             <span class="cmd-sub">Cambiar la apariencia visual</span>
           </div>
           <kbd class="cmd-shortcut">T</kbd>
         </div>
 
-        <div class="cmd-result-item" data-cmd="download-statement">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        <div class="cmd-result-item" data-cmd="new-lead">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           <div class="cmd-meta">
-            <span class="cmd-title">Descargar Extracto de Cuenta</span>
-            <span class="cmd-sub">Archivo CSV y comprobantes</span>
+            <span class="cmd-title">Disparar Llamada Saliente a Lead</span>
+            <span class="cmd-sub">Hacer que Valeria marque a un cliente</span>
           </div>
         </div>
 
         <div class="cmd-group-title">NAVEGACIÓN RÁPIDA</div>
-        <div class="cmd-result-item" data-cmd="nav-transactions">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div class="cmd-result-item" data-cmd="nav-whatsapp">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           <div class="cmd-meta">
-            <span class="cmd-title">Ir a Historial de Transacciones</span>
-            <span class="cmd-sub">Consultar entradas y salidas</span>
+            <span class="cmd-title">Abrir Bandeja de WhatsApp</span>
+            <span class="cmd-sub">Ver mensajes y respuestas del bot</span>
           </div>
         </div>
 
-        <div class="cmd-result-item" data-cmd="nav-support">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div class="cmd-result-item" data-cmd="nav-orders">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
           <div class="cmd-meta">
-            <span class="cmd-title">Contactar a Sofía Valenzuela</span>
-            <span class="cmd-sub">Ejecutiva asignada</span>
+            <span class="cmd-title">Gestión de Pedidos & Citas</span>
+            <span class="cmd-sub">Comandas tomadas por teléfono</span>
           </div>
         </div>
       </div>
@@ -873,11 +943,11 @@
     </div>
   </div>
 
-  <!-- SLIDE-OVER DRAWER DE DETALLE DE TRANSACCIÓN -->
+  <!-- SLIDE-OVER DRAWER DE DETALLE DE LLAMADA O PEDIDO -->
   <div class="slideover-backdrop" id="txDetailDrawer" aria-hidden="true">
     <div class="slideover-panel">
       <div class="slideover-header">
-        <h3 class="slideover-title">Detalle de Operación</h3>
+        <h3 class="slideover-title">Detalle de Llamada y Grabación IA</h3>
         <button class="slideover-close" id="btnCloseDrawer" aria-label="Cerrar detalle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -887,7 +957,7 @@
       </div>
 
       <div class="slideover-body" id="drawerBodyContent">
-        <!-- Contenido dinámico inyectado al hacer clic -->
+        <!-- Inyectado dinámicamente -->
       </div>
     </div>
   </div>
